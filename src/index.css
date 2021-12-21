@@ -247,7 +247,7 @@ body {
     }
 
 .File-item:hover{
-        box-shadow: 0 4px 16px rgba(25, 1, 11, 0.04);
+        box-shadow: 0 10px 100px rgb(25 1 11 / 10%);
     }
 
 .File-info {
