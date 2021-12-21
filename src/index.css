@@ -40,6 +40,25 @@ body {
 }
 
 /* Utilities */
+::-webkit-scrollbar {
+    width: .25rem;
+    height: .25rem;
+}
+
+::-webkit-scrollbar-track {
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-text);
+    -webkit-transition: var(--transition);
+    transition: var(--transition);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    opacity: .5;
+}
+
 .Logo {
     font-size: var(--logo-size);
     font-weight: 700;
@@ -78,6 +97,7 @@ body {
     color: var(--color-secondary);
     background: transparent;
     font-weight: 500;
+    padding: 0;
 }
 
 /* layout */
@@ -90,12 +110,11 @@ body {
 }
 
 .Section-grid {
-    display: grid;
+    margin-top: 1.8rem;
     max-width: 1200px;
-    grid-template-columns: 1fr;
-    grid-template-rows: 60px repeat(2, 1fr);
-    grid-gap: 1.25rem;
-    align-items: end;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
 /* DROP ZONE */
@@ -144,12 +163,11 @@ body {
 
 /* Filters */
 .FilterableFiles-content {
-    align-self: baseline;
     display: flex;
     flex-direction: column;
     padding: 15px 10px;
     gap: 1.2rem;
-    min-height: 300px;
+    min-height: var(--size);
     height: auto;
 }
 
@@ -171,6 +189,10 @@ body {
     align-items: center;
     width: 100%;
     gap: 10px;
+    overflow: hidden;
+    overflow-x: scroll;
+    height: 4rem;
+    padding: 0 .25rem;
 }
 
 .Filter-item {
@@ -183,6 +205,7 @@ body {
     border: 2px solid rgba(42, 42, 42, 0.05);
     cursor: pointer;
     transition: var(--transition);
+    gap: .4rem;
 }
 
 .Filter-item:hover {
@@ -191,8 +214,12 @@ body {
 
 .Filter-item.active {
     color: var(--color-primary);
-    box-shadow: 0 4px 32px rgba(25, 1, 11, 0.06);
+    box-shadow: 0 4px 8px rgba(25, 1, 11, 0.04);
     border: none
+}
+
+.File-icon {
+    cursor: pointer;
 }
 
 /* Files */
@@ -209,9 +236,19 @@ body {
     border-radius: .5rem;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 16px rgba(25, 1, 11, 0.04);
     align-items: center;
+    justify-content: space-evenly;
+    transition: var(--transition)
 }
+
+.File-item .btn-text {
+        font-size: .85rem;
+        font-weight: 500;
+    }
+
+.File-item:hover{
+        box-shadow: 0 4px 16px rgba(25, 1, 11, 0.04);
+    }
 
 .File-info {
     width: 100%;
@@ -228,6 +265,10 @@ body {
     font-size: 16px;
     font-weight: 500;
     color: var(--color-text);
+    max-width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .progress-bar {
@@ -269,3 +310,47 @@ body {
             --progress: 100%;
             background: var(--success);
         }
+
+@media (min-width: 768px) {
+    .Section-grid {
+        display: grid;
+        grid-template-rows: 10% 90%;
+        grid-template-columns: repeat(2, 1fr)
+    }
+
+        .Section-grid .Logo {
+            grid-column: span 2;
+        }
+
+    .layout {
+        --size: 350px;
+    }
+
+    .FilterableFiles-content {
+        max-height: var(--size);
+        overflow: hidden scroll;
+        padding: 1rem 1.25rem;
+        position: relative;
+    }
+    .Filters {
+        position: absolute;
+        max-width: 100%;
+        top: 2.5rem;
+    }
+
+    .Files {
+        position: relative;
+        top: 4rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .layout {
+        --size: 450px;
+    }
+}
+@media (min-width: 1200px) {
+    .layout {
+        --size: 500px;
+    }
+}

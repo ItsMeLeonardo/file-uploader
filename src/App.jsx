@@ -1,4 +1,7 @@
-import './App.css'
+import IconAll from './components/icons/IconAll'
+import IconVideo from './components/icons/IconVideo'
+import IconClose from './components/icons/IconClose'
+import IconSuccess from './components/icons/IconSuccess'
 
 function App() {
   return (
@@ -26,12 +29,12 @@ function App() {
         </header>
         <ul className="Filters">
           <li className="Filter-item active">
-            <i className="Filter-icon">icon</i>
+            <IconAll className="Filter-icon" color="rgb(255, 142, 60)" />
             <span className="Filter-text">All</span>
           </li>
           <li className="Filter-item">
-            <i className="Filter-icon">icon</i>
-            <span className="Filter-text">All</span>
+            <IconVideo className="Filter-icon" color="#2a2a2a" />
+            <span className="Filter-text">Videos</span>
           </li>
         </ul>
 
@@ -41,7 +44,7 @@ function App() {
               <h2 className="File-text">File name</h2>
               <span className="File-progress">80%</span>
               <button className="File-detail btn btn-text">Details</button>
-              <i className="File-icon">icon</i>
+              <IconClose className="File-icon" color="#D9376E" />
             </div>
             <div className="progress-bar">
               <span className="bar" />
@@ -49,10 +52,56 @@ function App() {
           </li>
           <li className="File-item completed">
             <div className="File-info">
-              <h2 className="File-text">File name</h2>
+              <h2 className="File-text">A very large name :D</h2>
               <span className="File-progress">80%</span>
               <button className="File-detail btn btn-text">Details</button>
-              <i className="File-icon">icon</i>
+              <IconSuccess className="File-icon" color="#44D937" />
+            </div>
+            <div className="progress-bar">
+              <span className="bar" />
+            </div>
+          </li>
+          <li className="File-item completed">
+            <div className="File-info">
+              <h2 className="File-text">A very large name :D</h2>
+              <span className="File-progress">80%</span>
+              <button className="File-detail btn btn-text">Details</button>
+              <IconSuccess className="File-icon" color="#44D937" />
+            </div>
+            <div className="progress-bar">
+              <span className="bar" />
+            </div>
+          </li>
+          <li className="File-item completed">
+            <div className="File-info">
+              <h2 className="File-text">A very large name :D</h2>
+              <span className="File-progress">80%</span>
+              <button className="File-detail btn btn-text">Details</button>
+              <IconSuccess className="File-icon" color="#44D937" />
+            </div>
+            <div className="progress-bar">
+              <span className="bar" />
+            </div>
+          </li>
+
+          <li className="File-item completed">
+            <div className="File-info">
+              <h2 className="File-text">A very large name :D</h2>
+              <span className="File-progress">80%</span>
+              <button className="File-detail btn btn-text">Details</button>
+              <IconSuccess className="File-icon" color="#44D937" />
+            </div>
+            <div className="progress-bar">
+              <span className="bar" />
+            </div>
+          </li>
+
+          <li className="File-item completed">
+            <div className="File-info">
+              <h2 className="File-text">A very large name :D</h2>
+              <span className="File-progress">80%</span>
+              <button className="File-detail btn btn-text">Details</button>
+              <IconSuccess className="File-icon" color="#44D937" />
             </div>
             <div className="progress-bar">
               <span className="bar" />
