@@ -119,15 +119,15 @@ body {
 .Drop-divider {
     position: relative;
     padding: 0 1rem;
-    background: var(--white)
-}
+    background: var(--white);
 
-.Drop-divider span {
+    & span {
         padding: 0 .5rem;
         background: var(--white);
         z-index: 1;
         position: relative;
     }
+}
 
 .Drop-divider::after {
     --h: 1px;
@@ -236,10 +236,9 @@ body {
     background: var(--white);
     border-radius: .5rem;
     position: relative;
-    box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.16)
-}
+    box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.16);
 
-.progress-bar .bar {
+    & .bar {
         --progress: 10%;
         position: absolute;
         top: 0;
@@ -252,20 +251,19 @@ body {
         color: transparent;
         box-shadow: 0 0 .75rem 0;
     }
+}
 
 .File-item:hover .bar {
     color: var(--color-primary);
 }
 
 .File-item.completed {
-    border: 2px solid rgba(42, 42, 42, 0.1)
-}
-
-.File-item.completed .progress-bar {
-        overflow: hidden
-    }
-
-.File-item.completed .progress-bar .bar {
+    border: 2px solid rgba(42, 42, 42, 0.1);
+    & .progress-bar {
+        overflow: hidden;
+        & .bar {
             --progress: 100%;
             background: var(--success);
         }
+    }
+}
