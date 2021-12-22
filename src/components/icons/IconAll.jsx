@@ -1,4 +1,6 @@
-export default function IconAll({ className, color = 'black' } = {}) {
+import React from 'react'
+
+function IconAll({ className, color = 'black' } = {}) {
   return (
     <svg
       width="20"
@@ -39,3 +41,5 @@ export default function IconAll({ className, color = 'black' } = {}) {
     </svg>
   )
 }
+
+export default React.memo(IconAll)

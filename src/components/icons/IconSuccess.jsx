@@ -1,4 +1,6 @@
-export default function IconSuccess({ className, color = 'black', size = 20 } = {}) {
+import React from 'react'
+
+function IconSuccess({ className, color = 'black', size = 20 } = {}) {
   return (
     <svg
       width={size}
@@ -18,3 +20,5 @@ export default function IconSuccess({ className, color = 'black', size = 20 } = 
     </svg>
   )
 }
+
+export default React.memo(IconSuccess)

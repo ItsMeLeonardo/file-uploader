@@ -1,4 +1,6 @@
-export default function IconDocument({ className, color = 'black' } = {}) {
+import React from 'react'
+
+function IconDocument({ className, color = 'black' } = {}) {
   return (
     <svg
       width="20"
@@ -43,3 +45,5 @@ export default function IconDocument({ className, color = 'black' } = {}) {
     </svg>
   )
 }
+
+export default React.memo(IconDocument)

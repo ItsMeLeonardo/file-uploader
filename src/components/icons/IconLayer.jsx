@@ -1,4 +1,6 @@
-export default function IconLayer({ className, color = 'black' } = {}) {
+import React from 'react'
+
+function IconLayer({ className, color = 'black' } = {}) {
   return (
     <svg
       width="20"
@@ -32,3 +34,5 @@ export default function IconLayer({ className, color = 'black' } = {}) {
     </svg>
   )
 }
+
+export default React.memo(IconLayer)

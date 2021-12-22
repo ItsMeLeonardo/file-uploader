@@ -1,4 +1,6 @@
-export default function IconClose({ className, color = 'black', size = 20 } = {}) {
+import React from 'react'
+
+function IconClose({ className, color = 'black', size = 20 } = {}) {
   return (
     <svg
       width={size}
@@ -18,3 +20,5 @@ export default function IconClose({ className, color = 'black', size = 20 } = {}
     </svg>
   )
 }
+
+export default React.memo(IconClose)
