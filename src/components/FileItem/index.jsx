@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import IconClose from '../icons/IconClose'
 import IconSuccess from '../icons/IconSuccess'
@@ -9,7 +9,7 @@ const classByStatus = {
   cancel: 'cancel',
 }
 
-export default function FileItem({ name, status, deleteFile, file }) {
+function FileItem({ name, status, deleteFile, file }) {
   const [statusState, setStatusState] = useState(status || 'loading')
   const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
 
@@ -61,3 +61,5 @@ export default function FileItem({ name, status, deleteFile, file }) {
     </li>
   )
 }
+
+export default React.memo(FileItem)

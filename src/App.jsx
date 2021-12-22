@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import DropZone from './components/DropZone'
 import Filters from './components/Filters'
@@ -68,9 +68,12 @@ function App() {
   const filterFunc = FILTERS.find(({ name }) => name === filter).filter
   const filesToShow = files.filter(filterFunc)
 
-  const deleteFile = ({ name }) => {
-    setFiles(files.filter((file) => file.name !== name))
-  }
+  const deleteFile = useCallback(
+    ({ name }) => {
+      setFiles(files.filter((file) => file.name !== name))
+    },
+    [setFiles],
+  )
 
   const addFile = (file) => {
     setFiles([...files, file])

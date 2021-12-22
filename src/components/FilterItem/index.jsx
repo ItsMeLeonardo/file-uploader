@@ -1,3 +1,5 @@
+import React from 'react'
+
 import IconAll from '../icons/IconAll'
 import IconGallery from '../icons/IconGallery'
 import IconVideo from '../icons/IconVideo'
@@ -23,7 +25,7 @@ const getIconByFilterName = ({ name, isActive }) => {
   }
 }
 
-export default function FilterItem({ isActive = false, name, filterBy } = {}) {
+function FilterItem({ isActive = false, name, filterBy } = {}) {
   const handleClick = () => {
     filterBy(name)
   }
@@ -35,3 +37,5 @@ export default function FilterItem({ isActive = false, name, filterBy } = {}) {
     </li>
   )
 }
+
+export default React.memo(FilterItem)
