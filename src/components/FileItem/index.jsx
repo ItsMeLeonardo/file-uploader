@@ -1,6 +1,7 @@
+import { useState } from 'react'
+
 import IconClose from '../icons/IconClose'
 import IconSuccess from '../icons/IconSuccess'
-import { useEffect, useState } from 'react'
 
 const getStatus = (progress) => {
   if (progress === 100) {

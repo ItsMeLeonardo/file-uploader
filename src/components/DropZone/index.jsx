@@ -1,21 +1,52 @@
+import { useRef, useState } from 'react'
+
 export default function DropZone({ addFile }) {
+  const [fileState, setFileState] = useState(null)
+
+  const dropZoneRef = useRef(null)
+
+  const handleDragEnter = (event) => {
+    event.preventDefault()
+  }
+  const handleDragOver = (event) => {
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'move'
+    dropZoneRef.current.classList.add('active')
+  }
+  const handleDragLeave = (event) => {
+    event.preventDefault()
+    dropZoneRef.current.classList.remove('active')
+  }
+
+  const handleDrop = (event) => {
+    event.preventDefault()
+    const file = event.dataTransfer.files[0]
+    console.log({ file })
+    dropZoneRef.current.classList.remove('active')
+    setFileState(file)
+  }
+
+  const handleChange = (event) => {
+    const file = event.target.files[0]
+    console.log({ file })
+    setFileState(file)
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    const input = event.target.file
-    const fileUploaded = input.files[0]
 
-    if (!fileUploaded) return
+    if (!fileState) return
 
     const file = {
-      name: fileUploaded.name,
-      type: fileUploaded.type,
-      size: fileUploaded.size,
+      name: fileState.name,
+      type: fileState.type,
+      size: fileState.size,
       progress: 0,
     }
 
     const fileReader = new FileReader()
 
-    fileReader.readAsDataURL(fileUploaded)
+    fileReader.readAsDataURL(fileState)
 
     fileReader.addEventListener('progress', (event) => {
       const progress = Math.round((event.loaded / event.total) * 100)
@@ -24,11 +55,20 @@ export default function DropZone({ addFile }) {
     })
 
     addFile(file)
+    setFileState(null)
   }
 
   return (
     <form onSubmit={handleSubmit} encType="multipart/form-data">
-      <label htmlFor="file" className="layout Drop-zone">
+      <label
+        htmlFor="file"
+        className="layout Drop-zone"
+        onDrop={handleDrop}
+        onDragLeave={handleDragLeave}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        ref={dropZoneRef}
+      >
         <div className="Drop-content">
           <h2 className="Drop-text">Drop file or click to upload file</h2>
 
@@ -36,8 +76,10 @@ export default function DropZone({ addFile }) {
             <span>And</span>
           </p>
 
-          <input type="file" name="file" id="file" style={{ display: 'none' }} />
-          <button className="btn btn-gradient">Send File</button>
+          <input type="file" name="file" id="file" hidden onChange={handleChange} />
+          <button className="btn btn-gradient" disabled={!fileState}>
+            Send File
+          </button>
         </div>
       </label>
     </form>

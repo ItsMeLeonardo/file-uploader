@@ -86,7 +86,10 @@ body {
 .btn:hover {
     box-shadow: 0 0 0 0 transparent;
 }
-
+.btn[disabled] {
+    opacity: .5;
+    pointer-events: none;
+}
 .btn-gradient {
     background: var(--main-gradient);
     color: var(--white);
