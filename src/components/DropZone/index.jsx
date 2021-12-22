@@ -1,18 +1,45 @@
-export default function DropZone() {
+export default function DropZone({ addFile }) {
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const input = event.target.file
+    const fileUploaded = input.files[0]
+
+    if (!fileUploaded) return
+
+    const file = {
+      name: fileUploaded.name,
+      type: fileUploaded.type,
+      size: fileUploaded.size,
+      progress: 0,
+    }
+
+    const fileReader = new FileReader()
+
+    fileReader.readAsDataURL(fileUploaded)
+
+    fileReader.addEventListener('progress', (event) => {
+      const progress = Math.round((event.loaded / event.total) * 100)
+
+      console.log({ progress })
+    })
+
+    addFile(file)
+  }
+
   return (
-    <form className="layout Drop-zone">
-      <div className="Drop-content">
-        <h2 className="Drop-text">Drag and drop your file here</h2>
+    <form onSubmit={handleSubmit} encType="multipart/form-data">
+      <label htmlFor="file" className="layout Drop-zone">
+        <div className="Drop-content">
+          <h2 className="Drop-text">Drop file or click to upload file</h2>
 
-        <p className="Drop-divider">
-          <span>or</span>
-        </p>
+          <p className="Drop-divider">
+            <span>And</span>
+          </p>
 
-        <label htmlFor="file" className="Drop-label btn btn-gradient">
-          Browse file
-          <input type="file" name="file" id="file" hidden />
-        </label>
-      </div>
+          <input type="file" name="file" id="file" style={{ display: 'none' }} />
+          <button className="btn btn-gradient">Send File</button>
+        </div>
+      </label>
     </form>
   )
 }
