@@ -41,18 +41,8 @@ export default function DropZone({ addFile }) {
       name: fileState.name,
       type: fileState.type,
       size: fileState.size,
-      progress: 0,
+      file: fileState,
     }
-
-    const fileReader = new FileReader()
-
-    fileReader.readAsDataURL(fileState)
-
-    fileReader.addEventListener('progress', (event) => {
-      const progress = Math.round((event.loaded / event.total) * 100)
-
-      console.log({ progress })
-    })
 
     addFile(file)
     setFileState(null)
@@ -70,7 +60,11 @@ export default function DropZone({ addFile }) {
         ref={dropZoneRef}
       >
         <div className="Drop-content">
-          <h2 className="Drop-text">Drop file or click to upload file</h2>
+          <h2 className="Drop-text">
+            {fileState
+              ? `Change file: ${fileState.name.slice(0, 30)}...`
+              : 'Drop file or click to upload file'}
+          </h2>
 
           <p className="Drop-divider">
             <span>And</span>
@@ -78,7 +72,7 @@ export default function DropZone({ addFile }) {
 
           <input type="file" name="file" id="file" hidden onChange={handleChange} />
           <button className="btn btn-gradient" disabled={!fileState}>
-            Send File
+            Upload file
           </button>
         </div>
       </label>

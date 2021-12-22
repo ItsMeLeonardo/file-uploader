@@ -1,44 +1,53 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import IconClose from '../icons/IconClose'
 import IconSuccess from '../icons/IconSuccess'
 
-const getStatus = (progress) => {
-  if (progress === 100) {
-    return 'completed'
-  }
-  if (progress !== undefined) {
-    return 'loading'
-  } else {
-    return 'cancel'
-  }
+const classByStatus = {
+  loading: '',
+  completed: 'completed',
+  cancel: 'cancel',
 }
 
-export default function FileItem({ name, progress, deleteFile }) {
-  const [status, setStatus] = useState(getStatus(progress))
-  const [progressValue, setProgressValue] = useState(progress)
+export default function FileItem({ name, status, deleteFile, file }) {
+  const [statusState, setStatusState] = useState(status || 'loading')
+  const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
 
-  const classByStatus = {
-    loading: '',
-    completed: 'completed',
-    cancel: 'cancel',
-  }
+  useEffect(() => {
+    if (typeof file !== 'object') return
+
+    const fileReader = new FileReader()
+
+    fileReader.readAsDataURL(file)
+
+    const getProgressPercent = (event) => {
+      const progress = Math.round((event.loaded / event.total) * 100)
+      console.log({ statusState })
+      setProgressValue(progress)
+      if (progress === 100) {
+        setStatusState('completed')
+      }
+    }
+
+    fileReader.addEventListener('progress', getProgressPercent)
+    return () => fileReader.removeEventListener('progress', getProgressPercent)
+  }, [])
 
   const handleCancel = () => {
-    setStatus('cancel')
+    setStatusState('cancel')
     setTimeout(() => {
       deleteFile({ name })
     }, 1000)
   }
 
   return (
-    <li className={`File-item ${classByStatus[status]}`}>
+    <li className={`File-item ${classByStatus[statusState]}`}>
       <div className="File-info">
         <h2 className="File-text">{name}</h2>
         <span className="File-progress">{progressValue}%</span>
         <button className="File-detail btn btn-text">Details</button>
 
-        {status === 'completed' ? (
+        {statusState === 'completed' ? (
           <IconSuccess className="File-icon" color="#44D937" />
         ) : (
           <div role="button" onClick={handleCancel}>

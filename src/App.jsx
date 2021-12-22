@@ -11,31 +11,31 @@ const FILES = [
     name: 'file1.txt',
     type: 'text/plain',
     size: '1.2 MB',
-    progress: 10,
+    status: 'completed',
   },
   {
     name: 'file2.png',
     type: 'image/png',
     size: '2.3 MB',
-    progress: 20,
+    status: 'completed',
   },
   {
     name: 'file3.mp4',
     type: 'video/mp4',
     size: '3.4 MB',
-    progress: 30,
+    status: 'completed',
   },
   {
     name: 'file4.pdf',
     type: 'application/pdf',
     size: '4.5 MB',
-    progress: 40,
+    status: 'completed',
   },
   {
     name: 'file5.mp3',
     type: 'audio/mp3',
     size: '5.6 MB',
-    progress: 100,
+    status: 'loading',
   },
 ]
 const FILTERS = [
