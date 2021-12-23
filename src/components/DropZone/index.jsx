@@ -21,14 +21,12 @@ export default function DropZone({ addFile }) {
   const handleDrop = (event) => {
     event.preventDefault()
     const file = event.dataTransfer.files[0]
-    console.log({ file })
     dropZoneRef.current.classList.remove('active')
     setFileState(file)
   }
 
   const handleChange = (event) => {
     const file = event.target.files[0]
-    console.log({ file })
     setFileState(file)
   }
 
@@ -41,6 +39,7 @@ export default function DropZone({ addFile }) {
       name: fileState.name,
       type: fileState.type,
       size: fileState.size,
+      status: fileState.size === 0 ? 'completed' : 'loading',
       file: fileState,
     }
 

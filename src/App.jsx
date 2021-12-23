@@ -6,38 +6,6 @@ import FileList from './components/FileList'
 import FilterableFilesTable from './components/FilterableFilesTable'
 import FilterItem from './components/FilterItem'
 
-const FILES = [
-  {
-    name: 'file1.txt',
-    type: 'text/plain',
-    size: '1.2 MB',
-    status: 'completed',
-  },
-  {
-    name: 'file2.png',
-    type: 'image/png',
-    size: '2.3 MB',
-    status: 'completed',
-  },
-  {
-    name: 'file3.mp4',
-    type: 'video/mp4',
-    size: '3.4 MB',
-    status: 'completed',
-  },
-  {
-    name: 'file4.pdf',
-    type: 'application/pdf',
-    size: '4.5 MB',
-    status: 'completed',
-  },
-  {
-    name: 'file5.mp3',
-    type: 'audio/mp3',
-    size: '5.6 MB',
-    status: 'loading',
-  },
-]
 const FILTERS = [
   {
     name: 'All',
@@ -57,13 +25,13 @@ const FILTERS = [
   },
   {
     name: 'Others',
-    filter: (file) => file.type.includes('audio/'),
+    filter: (file) => file.type.includes('text/'),
   },
 ]
 
 function App() {
   const [filter, setFilter] = useState('All')
-  const [files, setFiles] = useState(FILES)
+  const [files, setFiles] = useState([])
 
   const filterFunc = FILTERS.find(({ name }) => name === filter).filter
   const filesToShow = files.filter(filterFunc)
@@ -79,11 +47,33 @@ function App() {
     setFiles([...files, file])
   }
 
+  const clearComplete = useCallback(() => {
+    setFiles((prevFiles) =>
+      prevFiles.filter(({ status }) => {
+        return status !== 'completed'
+      }),
+    )
+  }, [])
+
+  const setCompleted = useCallback(({ name }) => {
+    setFiles((prevFiles) =>
+      prevFiles.map((file) => {
+        if (file.name === name) {
+          return {
+            ...file,
+            status: 'completed',
+          }
+        }
+        return file
+      }),
+    )
+  }, [])
+
   return (
     <section className="Section-grid">
       <header className="Logo">UpCloud</header>
       <DropZone addFile={addFile} />
-      <FilterableFilesTable>
+      <FilterableFilesTable clearComplete={clearComplete}>
         <Filters>
           {FILTERS.map(({ name }) => (
             <FilterItem
@@ -94,7 +84,11 @@ function App() {
             />
           ))}
         </Filters>
-        <FileList files={filesToShow} deleteFile={deleteFile} />
+        <FileList
+          files={filesToShow}
+          deleteFile={deleteFile}
+          setCompleted={setCompleted}
+        />
       </FilterableFilesTable>
     </section>
   )

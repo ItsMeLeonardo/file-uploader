@@ -9,27 +9,30 @@ const classByStatus = {
   cancel: 'cancel',
 }
 
-function FileItem({ name, status, deleteFile, file }) {
+function FileItem({ name, status, deleteFile, file, setCompleted }) {
   const [statusState, setStatusState] = useState(status || 'loading')
   const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
 
   useEffect(() => {
     if (typeof file !== 'object') return
 
-    const fileReader = new FileReader()
+    if (status === 'completed') return
 
+    const fileReader = new FileReader()
     fileReader.readAsDataURL(file)
 
     const getProgressPercent = (event) => {
       const progress = Math.round((event.loaded / event.total) * 100)
-      console.log({ statusState })
+
       setProgressValue(progress)
       if (progress === 100) {
         setStatusState('completed')
+        setCompleted({ name })
       }
     }
 
     fileReader.addEventListener('progress', getProgressPercent)
+
     return () => fileReader.removeEventListener('progress', getProgressPercent)
   }, [])
 

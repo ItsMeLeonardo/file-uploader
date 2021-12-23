@@ -1,6 +1,6 @@
 import FileItem from '../FileItem'
 
-export default function FileList({ files, deleteFile }) {
+export default function FileList({ files, deleteFile, setCompleted }) {
   return (
     <ul className="Files">
       {files.map(({ name, status, file }) => (
@@ -10,6 +10,7 @@ export default function FileList({ files, deleteFile }) {
           status={status}
           file={file}
           deleteFile={deleteFile}
+          setCompleted={setCompleted}
         />
       ))}
     </ul>
