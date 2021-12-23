@@ -6,7 +6,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "css": "npx postcss src/styles/index.pcss -o src/index.css",
-    "css:watch": "npx postcss --watch src/styles/index.pcss -o src/index.css"
+    "css:watch": "npx postcss --watch src/styles/index.pcss -o src/index.css",
+    "production": "vercel --prod",
+    "inspect": "vercel"
   },
   "dependencies": {
     "idb": "^7.0.0",

@@ -1,16 +1,9 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 
 import { getFiles, updateService, saveFile } from '../services/files'
 
 export const useFile = () => {
-  const [files, setFiles] = useState([])
-
-  // useEffect(() => {
-  //   if (files.length === 0) {
-  //     getFiles().then(setFiles)
-  //     console.log({ files })
-  //   }
-  // }, [files])
+  const [files] = useState([])
 
   const saveInService = useCallback((file) => {
     saveFile(file).then().catch(console.log)

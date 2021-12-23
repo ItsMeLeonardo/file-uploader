@@ -9,7 +9,7 @@ const classByStatus = {
   cancel: 'cancel',
 }
 
-function FileItem({ fileItem, deleteFile, setCompleted, saveFile }) {
+function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
   const { name, status, file } = fileItem
 
   const [statusState, setStatusState] = useState(status || 'loading')
@@ -25,19 +25,24 @@ function FileItem({ fileItem, deleteFile, setCompleted, saveFile }) {
 
     const getProgressPercent = (event) => {
       const progress = Math.round((event.loaded / event.total) * 100)
-
       setProgressValue(progress)
-      if (progress === 100) {
-        setStatusState('completed')
-        setCompleted({ name })
-        console.log({ fileItem })
-        saveFile(fileItem)
-      }
+    }
+
+    const handleLoadFile = () => {
+      setStatusState('completed')
+      const url = fileReader.result
+      setCompleted({ name, url })
+      saveFile(fileItem)
     }
 
     fileReader.addEventListener('progress', getProgressPercent)
 
-    return () => fileReader.removeEventListener('progress', getProgressPercent)
+    fileReader.addEventListener('load', handleLoadFile)
+
+    return () => {
+      fileReader.removeEventListener('progress', getProgressPercent)
+      fileReader.removeEventListener('load', handleLoadFile)
+    }
   }, [])
 
   const handleCancel = () => {
@@ -52,7 +57,9 @@ function FileItem({ fileItem, deleteFile, setCompleted, saveFile }) {
       <div className="File-info">
         <h2 className="File-text">{name}</h2>
         <span className="File-progress">{progressValue}%</span>
-        <button className="File-detail btn btn-text">Details</button>
+        <button className="File-detail btn btn-text" onClick={seeDetail}>
+          Details
+        </button>
 
         {statusState === 'completed' ? (
           <IconSuccess className="File-icon" color="#44D937" />

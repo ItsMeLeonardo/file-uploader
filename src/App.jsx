@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useFile } from './hooks/useFile'
 
 import DropZone from './components/DropZone'
 import Filters from './components/Filters'
 import FileList from './components/FileList'
 import FilterableFilesTable from './components/FilterableFilesTable'
 import FilterItem from './components/FilterItem'
-import { useFile } from './hooks/useFile'
 
 const FILTERS = [
   {
@@ -46,7 +46,7 @@ function App() {
     ({ name }) => {
       setFiles(files.filter((file) => file.name !== name))
     },
-    [setFiles],
+    [files],
   )
 
   const addFile = (file) => {
@@ -62,13 +62,14 @@ function App() {
     deleteFromService(files)
   }, [])
 
-  const setCompleted = useCallback(({ name }) => {
+  const setCompleted = useCallback(({ name, url }) => {
     setFiles((prevFiles) =>
       prevFiles.map((file) => {
         if (file.name === name) {
           return {
             ...file,
             status: 'completed',
+            url,
           }
         }
         return file

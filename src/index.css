@@ -9,6 +9,7 @@
     sans-serif;
     list-style: none;
     outline: none;
+    text-decoration: none;
 }
 
 :root {
@@ -37,6 +38,12 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
+}
+img {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+       object-fit: cover;
 }
 
 /* Utilities */
@@ -94,6 +101,11 @@ body {
     background: var(--main-gradient);
     color: var(--white);
     box-shadow: 0 24px 40px -12px var(--color-primary);
+}
+.btn-secondary {
+    background: var(--color-secondary);
+    color: var(--white);
+    box-shadow: 0 24px 40px -12px var(--color-secondary);
 }
 
 .btn-text {
@@ -349,6 +361,105 @@ body {
 
 .File-item:hover .bar {
     color: var(--color-primary);
+}
+
+/* MODAL */
+.Modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 254, 0.9);
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+    display: grid;
+    place-content: center;
+    z-index: 1;
+}
+
+.Modal {
+    --size: 300px;
+    width: var(--size);
+    height: var(--size);
+    background: #FFFFFE;
+    box-shadow: 0 10px 100px rgba(42, 42, 42, 0.1);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+}
+
+.Modal-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+}
+
+.Modal-img {
+    aspect-ratio: 16/9;
+    position: relative;
+    display: flex;
+    width: 100%;
+    background: var(--color-secondary);
+    border-radius: 10px;
+    background: linear-gradient(45deg, #ff8e3c, #d9376e, #d937d3, #d937a1, #4937d9);
+    background-size: 1000% 1000%;
+    -webkit-animation: AnimationName 5s ease infinite;
+            animation: AnimationName 5s ease infinite;
+    overflow: hidden;
+}
+@-webkit-keyframes AnimationName {
+    0%{background-position:0 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0 50%}
+}
+
+.Modal-img.without-preview::after {
+    content: "This file has no thumbnail";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--white);
+}
+
+.Modal-data {
+    display: grid;
+    width: 100%;
+    gap:.5rem
+}
+
+.Modal-data-item {
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.Modal-data-item h1 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-text);
+    }
+
+.Modal-footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
 @media (min-width: 768px) {
