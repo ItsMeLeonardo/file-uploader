@@ -9,14 +9,16 @@ const classByStatus = {
   cancel: 'cancel',
 }
 
-function FileItem({ name, status, deleteFile, file, setCompleted }) {
+function FileItem({ fileItem, deleteFile, setCompleted, saveFile }) {
+  const { name, status, file } = fileItem
+
   const [statusState, setStatusState] = useState(status || 'loading')
   const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
 
   useEffect(() => {
     if (typeof file !== 'object') return
 
-    if (status === 'completed') return
+    if (status === 'completed' || progressValue >= 100) return
 
     const fileReader = new FileReader()
     fileReader.readAsDataURL(file)
@@ -28,6 +30,8 @@ function FileItem({ name, status, deleteFile, file, setCompleted }) {
       if (progress === 100) {
         setStatusState('completed')
         setCompleted({ name })
+        console.log({ fileItem })
+        saveFile(fileItem)
       }
     }
 

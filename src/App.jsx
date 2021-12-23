@@ -1,10 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import DropZone from './components/DropZone'
 import Filters from './components/Filters'
 import FileList from './components/FileList'
 import FilterableFilesTable from './components/FilterableFilesTable'
 import FilterItem from './components/FilterItem'
+import { useFile } from './hooks/useFile'
 
 const FILTERS = [
   {
@@ -31,7 +32,12 @@ const FILTERS = [
 
 function App() {
   const [filter, setFilter] = useState('All')
+  const { deleteFromService, getFiles } = useFile()
   const [files, setFiles] = useState([])
+
+  useEffect(() => {
+    getFiles().then((files) => setFiles(files))
+  }, [])
 
   const filterFunc = FILTERS.find(({ name }) => name === filter).filter
   const filesToShow = files.filter(filterFunc)
@@ -53,6 +59,7 @@ function App() {
         return status !== 'completed'
       }),
     )
+    deleteFromService(files)
   }, [])
 
   const setCompleted = useCallback(({ name }) => {

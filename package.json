@@ -9,6 +9,7 @@
     "css:watch": "npx postcss --watch src/styles/index.pcss -o src/index.css"
   },
   "dependencies": {
+    "idb": "^7.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

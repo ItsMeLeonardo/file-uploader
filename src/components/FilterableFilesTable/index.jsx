@@ -1,7 +1,6 @@
 export default function FilterableFilesTable({ children, clearComplete }) {
   const handleClick = () => {
     clearComplete()
-    console.log({ clearComplete })
   }
 
   return (

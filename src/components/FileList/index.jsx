@@ -1,16 +1,18 @@
 import FileItem from '../FileItem'
+import { useFile } from '../../hooks/useFile'
 
 export default function FileList({ files, deleteFile, setCompleted }) {
+  const { saveInService } = useFile()
+
   return (
     <ul className="Files">
-      {files.map(({ name, status, file }) => (
+      {files.map((file) => (
         <FileItem
-          key={name}
-          name={name}
-          status={status}
-          file={file}
+          key={file.name}
+          fileItem={file}
           deleteFile={deleteFile}
           setCompleted={setCompleted}
+          saveFile={saveInService}
         />
       ))}
     </ul>
