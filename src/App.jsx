@@ -32,7 +32,7 @@ const FILTERS = [
 
 function App() {
   const [filter, setFilter] = useState('All')
-  const { deleteFromService, getFiles } = useFile()
+  const { deleteAllFromService, deleteFromService, getFiles } = useFile()
   const [files, setFiles] = useState([])
 
   useEffect(() => {
@@ -43,8 +43,9 @@ function App() {
   const filesToShow = files.filter(filterFunc)
 
   const deleteFile = useCallback(
-    ({ name }) => {
+    ({ name, id }) => {
       setFiles(files.filter((file) => file.name !== name))
+      deleteFromService({ id })
     },
     [files],
   )
@@ -59,7 +60,7 @@ function App() {
         return status !== 'completed'
       }),
     )
-    deleteFromService(files)
+    deleteAllFromService()
   }, [])
 
   const setCompleted = useCallback(({ name, url }) => {

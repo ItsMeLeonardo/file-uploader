@@ -12,7 +12,7 @@ function ModalDetail({ file, closeModal, deleteFile }) {
   }
 
   const handleDelete = () => {
-    deleteFile({ name: file.name })
+    deleteFile({ name: file.name, id: file.id })
     closeModal()
   }
 
