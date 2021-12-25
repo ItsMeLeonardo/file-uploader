@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 
 import { getFiles, updateService, saveFile, deleteFile } from '../services/files'
 
-export const useFiles = () => {
+export const useFilesLocal = () => {
   const [files] = useState([])
 
   const saveInService = useCallback((file, setProgressValue) => {

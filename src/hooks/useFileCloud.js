@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { saveFile } from '../services/filesCloud'
 
-export function useSingleFile({ fileItem, setCompleted, deleteFile } = {}) {
+export function useFileCloud({ fileItem, setCompleted, deleteFile } = {}) {
   const { name, status, file } = fileItem
 
   const [progressValue, setProgressValue] = useState(0)

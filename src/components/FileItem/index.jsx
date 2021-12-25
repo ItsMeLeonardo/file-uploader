@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import IconClose from '../icons/IconClose'
 import IconSuccess from '../icons/IconSuccess'
-import { useSingleFile } from '../../hooks/useSingleFile'
+import { useFileCloud } from '../../hooks/useFileCloud'
 
 const classByStatus = {
   loading: '',
@@ -11,56 +11,11 @@ const classByStatus = {
 }
 
 function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
-  /*
-  SAVE FILES IN IndexedDB
-  const { name, status, file } = fileItem
-
-  const [statusState, setStatusState] = useState(status || 'loading')
-  const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
-
-  useEffect(() => {
-    if (typeof file !== 'object') return
-
-    if (status === 'completed' || progressValue >= 100) return
-
-    const fileReader = new FileReader()
-    fileReader.readAsDataURL(file)
-
-    const getProgressPercent = (event) => {
-      const progress = Math.round((event.loaded / event.total) * 100)
-      setProgressValue(progress)
-    }
-
-    const handleLoadFile = () => {
-      setStatusState('completed')
-      const url = fileReader.result
-      setCompleted({ name, url })
-      saveFile(fileItem)
-    }
-
-    fileReader.addEventListener('progress', getProgressPercent)
-
-    fileReader.addEventListener('load', handleLoadFile)
-
-    return () => {
-      fileReader.removeEventListener('progress', getProgressPercent)
-      fileReader.removeEventListener('load', handleLoadFile)
-    }
-  }, [])
-
-  const handleCancel = () => {
-    setStatusState('cancel')
-    setTimeout(() => {
-      deleteFile({ name })
-    }, 1000)
-  }
-  */
-
   const {
     progressValue,
     statusState,
     cancelUpload: handleCancel,
-  } = useSingleFile({
+  } = useFileCloud({
     fileItem,
     deleteFile,
     setCompleted,

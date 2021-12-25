@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useFiles } from '../../hooks/useFiles'
+import { useFilesLocal } from '../../hooks/useFilesLocal'
 import { useToggle } from '../../hooks/useToggle'
 
 import FileItem from '../FileItem'
@@ -8,7 +8,7 @@ import ModalDetail from '../ModalDetail'
 
 export default function FileList({ files, deleteFile, setCompleted }) {
   const [modalIsOpen, toggleModal] = useToggle()
-  const { saveInService } = useFiles()
+  const { saveInService } = useFilesLocal()
   const [fileDetail, setFileDetail] = useState(null)
 
   const handleSeeDetail = (file) => {

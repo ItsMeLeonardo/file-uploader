@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useFiles } from './hooks/useFiles'
+import { useFilesLocal } from './hooks/useFilesLocal'
 
 import DropZone from './components/DropZone'
 import Filters from './components/Filters'
@@ -7,40 +7,27 @@ import FileList from './components/FileList'
 import FilterableFilesTable from './components/FilterableFilesTable'
 import FilterItem from './components/FilterItem'
 
-const FILTERS = [
-  {
-    name: 'All',
-    filter: () => true,
-  },
-  {
-    name: 'Images',
-    filter: (file) => file.type.startsWith('image/'),
-  },
-  {
-    name: 'Videos',
-    filter: (file) => file.type.startsWith('video/'),
-  },
-  {
-    name: 'Documents',
-    filter: (file) => file.type.startsWith('application/'),
-  },
-  {
-    name: 'Others',
-    filter: (file) => file.type.includes('text/'),
-  },
-]
+const FILTERS = {
+  All: () => true,
+  Images: (file) => file.type.startsWith('image/'),
+  Videos: (file) => file.type.startsWith('video/'),
+  Documents: (file) => file.type.startsWith('application/'),
+  Others: (file) =>
+    !file.type.startsWith('image/') &&
+    !file.type.startsWith('video/') &&
+    !file.type.startsWith('application/'),
+}
 
 function App() {
   const [filter, setFilter] = useState('All')
-  const { deleteAllFromService, deleteFromService, getFiles } = useFiles()
+  const { deleteAllFromService, deleteFromService, getFiles } = useFilesLocal()
   const [files, setFiles] = useState([])
 
   useEffect(() => {
     getFiles().then((files) => setFiles(files))
   }, [])
 
-  const filterFunc = FILTERS.find(({ name }) => name === filter).filter
-  const filesToShow = files.filter(filterFunc)
+  const filesToShow = files.filter(FILTERS[filter])
 
   const deleteFile = useCallback(
     ({ name, id }) => {
@@ -84,12 +71,12 @@ function App() {
       <DropZone addFile={addFile} />
       <FilterableFilesTable clearComplete={clearComplete}>
         <Filters>
-          {FILTERS.map(({ name }) => (
+          {Object.keys(FILTERS).map((filterName) => (
             <FilterItem
-              key={name}
+              key={filterName}
               filterBy={setFilter}
-              isActive={name === filter}
-              name={name}
+              isActive={filterName === filter}
+              name={filterName}
             />
           ))}
         </Filters>
