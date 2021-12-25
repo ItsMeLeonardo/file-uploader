@@ -19,9 +19,9 @@ export default function FileList({ files, deleteFile, setCompleted }) {
   return (
     <>
       <ul className="Files">
-        {files.map((file) => (
+        {files.map((file, index) => (
           <FileItem
-            key={file.name}
+            key={`${file.name}-${index}-${file.size}`}
             fileItem={file}
             deleteFile={deleteFile}
             setCompleted={setCompleted}
