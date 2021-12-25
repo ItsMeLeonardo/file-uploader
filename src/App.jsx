@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useFile } from './hooks/useFile'
+import { useFiles } from './hooks/useFiles'
 
 import DropZone from './components/DropZone'
 import Filters from './components/Filters'
@@ -32,7 +32,7 @@ const FILTERS = [
 
 function App() {
   const [filter, setFilter] = useState('All')
-  const { deleteAllFromService, deleteFromService, getFiles } = useFile()
+  const { deleteAllFromService, deleteFromService, getFiles } = useFiles()
   const [files, setFiles] = useState([])
 
   useEffect(() => {

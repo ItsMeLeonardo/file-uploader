@@ -1,8 +1,18 @@
+import { useEffect, useState } from 'react'
+
 import { formatBytes } from '../../services/formatBytes'
 import { cutTextWithEllipsis } from '../../services/cutTextWithEllipsis'
 
 function ModalDetail({ file, closeModal, deleteFile }) {
+  const [urlFile, setUrlFile] = useState('#')
+
   const handleClickModalBody = (e) => e.stopPropagation()
+
+  useEffect(() => {
+    const url = URL.createObjectURL(file.file)
+    setUrlFile(url)
+    return () => URL.revokeObjectURL(url)
+  }, [])
 
   const handleError = (event) => {
     const img = event.target.closest('img')
@@ -20,7 +30,7 @@ function ModalDetail({ file, closeModal, deleteFile }) {
     <div className="Modal" onClick={handleClickModalBody}>
       <div className="Modal-body">
         <picture className="Modal-img">
-          <img src={file.url} alt="modal" onError={handleError} />
+          <img src={urlFile} alt="modal" onError={handleError} />
         </picture>
         <div className="Modal-data">
           <header className="Modal-data-item">
@@ -31,7 +41,7 @@ function ModalDetail({ file, closeModal, deleteFile }) {
         </div>
       </div>
       <footer className="Modal-footer">
-        <a href={file.url} className="btn btn-gradient" download>
+        <a href={urlFile} className="btn btn-gradient" download>
           Download
         </a>
         <button className="btn btn-secondary" onClick={handleDelete}>

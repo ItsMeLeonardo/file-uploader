@@ -33,8 +33,6 @@ export default function DropZone({ addFile }) {
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    if (!fileState) return
-
     const file = {
       name: fileState.name,
       type: fileState.type,
@@ -42,7 +40,6 @@ export default function DropZone({ addFile }) {
       status: fileState.size === 0 ? 'completed' : 'loading',
       file: fileState,
     }
-
     addFile(file)
     setFileState(null)
   }

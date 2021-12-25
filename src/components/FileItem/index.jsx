@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import IconClose from '../icons/IconClose'
 import IconSuccess from '../icons/IconSuccess'
+import { useSingleFile } from '../../hooks/useSingleFile'
 
 const classByStatus = {
   loading: '',
@@ -10,6 +11,8 @@ const classByStatus = {
 }
 
 function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
+  /*
+  SAVE FILES IN IndexedDB
   const { name, status, file } = fileItem
 
   const [statusState, setStatusState] = useState(status || 'loading')
@@ -51,11 +54,22 @@ function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
       deleteFile({ name })
     }, 1000)
   }
+  */
+
+  const {
+    progressValue,
+    statusState,
+    cancelUpload: handleCancel,
+  } = useSingleFile({
+    fileItem,
+    deleteFile,
+    setCompleted,
+  })
 
   return (
     <li className={`File-item ${classByStatus[statusState]}`}>
       <div className="File-info">
-        <h2 className="File-text">{name}</h2>
+        <h2 className="File-text">{fileItem.name}</h2>
         <span className="File-progress">{progressValue}%</span>
         <button className="File-detail btn btn-text" onClick={seeDetail}>
           Details
