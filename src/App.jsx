@@ -23,22 +23,24 @@ function App() {
   const { deleteAllFromService, deleteFromService, getFiles } = useFilesLocal()
   const [files, setFiles] = useState([])
 
+  // fixme: transform this into a hook
   useEffect(() => {
     getFiles().then((files) => setFiles(files))
   }, [])
 
   const filesToShow = files.filter(FILTERS[filter])
 
+  // REMOVE THIS FROM ====
   const deleteFile = useCallback(
     ({ name, id }) => {
       setFiles(files.filter((file) => file.name !== name))
-      deleteFromService({ id })
+      deleteFromService({ id }) // remove from indexedDB
     },
     [files],
   )
 
   const addFile = (file) => {
-    setFiles([...files, file])
+    setFiles([...files, file]) // add to local state
   }
 
   const clearComplete = useCallback(() => {
@@ -47,28 +49,35 @@ function App() {
         return status !== 'completed'
       }),
     )
-    deleteAllFromService()
+    deleteAllFromService() // delete from indexedDB
   }, [])
 
-  const setCompleted = useCallback(({ name, url }) => {
-    setFiles((prevFiles) =>
-      prevFiles.map((file) => {
-        if (file.name === name) {
-          return {
-            ...file,
-            status: 'completed',
-            url,
+  // refactor this
+  const setCompleted = useCallback(({ name }) => {
+    setFiles(
+      (
+        prevFiles, // update status only in local state
+      ) =>
+        prevFiles.map((file) => {
+          if (file.name === name) {
+            return {
+              ...file,
+              status: 'completed',
+            }
           }
-        }
-        return file
-      }),
+          return file
+        }),
     )
   }, [])
+
+  // ======= Here ends the remove part
 
   return (
     <section className="Section-grid">
       <header className="Logo">UpCloud</header>
+
       <DropZone addFile={addFile} />
+
       <FilterableFilesTable clearComplete={clearComplete}>
         <Filters>
           {Object.keys(FILTERS).map((filterName) => (

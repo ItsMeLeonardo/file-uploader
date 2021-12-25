@@ -3,8 +3,7 @@ import { saveFile } from '../services/filesCloud'
 
 export function useFileCloud({ fileItem, setCompleted, deleteFile } = {}) {
   const { name, status, file } = fileItem
-
-  const [progressValue, setProgressValue] = useState(0)
+  const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
   const [statusState, setStatusState] = useState(status || 'loading')
 
   useEffect(() => {
