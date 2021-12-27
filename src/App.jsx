@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useFilesLocal } from './hooks/useFilesLocal'
+import { useState } from 'react'
+import { useFiles } from './hooks/useFiles'
 
 import DropZone from './components/DropZone'
 import Filters from './components/Filters'
@@ -20,57 +20,9 @@ const FILTERS = {
 
 function App() {
   const [filter, setFilter] = useState('All')
-  const { deleteAllFromService, deleteFromService, getFiles } = useFilesLocal()
-  const [files, setFiles] = useState([])
-
-  // fixme: transform this into a hook
-  useEffect(() => {
-    getFiles().then((files) => setFiles(files))
-  }, [])
+  const { files, deleteFromService, clearFiles, addFile } = useFiles()
 
   const filesToShow = files.filter(FILTERS[filter])
-
-  // REMOVE THIS FROM ====
-  const deleteFile = useCallback(
-    ({ name, id }) => {
-      setFiles(files.filter((file) => file.name !== name))
-      deleteFromService({ id }) // remove from indexedDB
-    },
-    [files],
-  )
-
-  const addFile = (file) => {
-    setFiles([...files, file]) // add to local state
-  }
-
-  const clearComplete = useCallback(() => {
-    setFiles((prevFiles) =>
-      prevFiles.filter(({ status }) => {
-        return status !== 'completed'
-      }),
-    )
-    deleteAllFromService() // delete from indexedDB
-  }, [])
-
-  // refactor this
-  const setCompleted = useCallback(({ name }) => {
-    setFiles(
-      (
-        prevFiles, // update status only in local state
-      ) =>
-        prevFiles.map((file) => {
-          if (file.name === name) {
-            return {
-              ...file,
-              status: 'completed',
-            }
-          }
-          return file
-        }),
-    )
-  }, [])
-
-  // ======= Here ends the remove part
 
   return (
     <section className="Section-grid">
@@ -78,7 +30,7 @@ function App() {
 
       <DropZone addFile={addFile} />
 
-      <FilterableFilesTable clearComplete={clearComplete}>
+      <FilterableFilesTable clearComplete={clearFiles}>
         <Filters>
           {Object.keys(FILTERS).map((filterName) => (
             <FilterItem
@@ -89,11 +41,7 @@ function App() {
             />
           ))}
         </Filters>
-        <FileList
-          files={filesToShow}
-          deleteFile={deleteFile}
-          setCompleted={setCompleted}
-        />
+        <FileList files={filesToShow} deleteFile={deleteFromService} />
       </FilterableFilesTable>
     </section>
   )

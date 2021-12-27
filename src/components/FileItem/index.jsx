@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import IconClose from '../icons/IconClose'
 import IconSuccess from '../icons/IconSuccess'
-import { useFileCloud } from '../../hooks/useFileCloud'
+import { useSaveFileCloud } from '../../hooks/useSaveFileCloud'
 
 const classByStatus = {
   loading: '',
@@ -10,23 +10,19 @@ const classByStatus = {
   cancel: 'cancel',
 }
 
-function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
+function FileItem({ fileItem, seeDetail }) {
   const {
     progressValue,
     statusState,
     cancelUpload: handleCancel,
-  } = useFileCloud({
-    fileItem,
-    deleteFile,
-    setCompleted,
-  })
+  } = useSaveFileCloud({ fileItem })
 
   return (
     <li className={`File-item ${classByStatus[statusState]}`}>
       <div className="File-info">
         <h2 className="File-text">{fileItem.name}</h2>
         <span className="File-progress">{progressValue}%</span>
-        <button className="File-detail btn btn-text" onClick={seeDetail}>
+        <button className="File-detail btn btn-text" onClick={() => seeDetail(fileItem)}>
           Details
         </button>
 

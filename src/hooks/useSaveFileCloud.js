@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { saveFile } from '../services/filesCloud'
+import { useFiles } from './useFiles'
 
-export function useFileCloud({ fileItem, setCompleted, deleteFile } = {}) {
-  const { name, status, file } = fileItem
+export function useSaveFileCloud({ fileItem }) {
+  const { status, file } = fileItem
   const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
   const [statusState, setStatusState] = useState(status || 'loading')
+  const { addFile } = useFiles()
 
   useEffect(() => {
     if (typeof file !== 'object') return
@@ -13,23 +15,25 @@ export function useFileCloud({ fileItem, setCompleted, deleteFile } = {}) {
 
     const fileData = new FormData()
     fileData.append('file', file)
-
-    saveFile(fileData, setProgressValue)?.then(() => {
+    saveFile(fileData, setProgressValue)?.then(({ id }) => {
       setStatusState('completed')
-      setCompleted({ name })
+      addFile({
+        ...fileItem,
+        id,
+        status: 'completed',
+      })
     })
   }, [])
 
-  const cancelUpload = () => {
-    setStatusState('cancel')
-    setTimeout(() => {
-      deleteFile({ name })
-    }, 1000)
-  }
+  // const cancelUpload = () => {
+  //   setStatusState('cancel')
+  //   setTimeout(() => {
+  //     deleteFile({ name })
+  //   }, 1000)
+  // }
 
   return {
     progressValue,
     statusState,
-    cancelUpload,
   }
 }

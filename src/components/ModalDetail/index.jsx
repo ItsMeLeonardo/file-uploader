@@ -4,11 +4,12 @@ import { formatBytes } from '../../services/formatBytes'
 import { cutTextWithEllipsis } from '../../services/cutTextWithEllipsis'
 
 function ModalDetail({ file, closeModal, deleteFile }) {
-  const [urlFile, setUrlFile] = useState('#')
+  const [urlFile, setUrlFile] = useState(file.url || '#')
 
   const handleClickModalBody = (e) => e.stopPropagation()
 
   useEffect(() => {
+    if (file.url) return
     const url = URL.createObjectURL(file.file)
     setUrlFile(url)
     return () => URL.revokeObjectURL(url)
@@ -22,7 +23,7 @@ function ModalDetail({ file, closeModal, deleteFile }) {
   }
 
   const handleDelete = () => {
-    deleteFile({ name: file.name, id: file.id })
+    deleteFile({ id: file.id })
     closeModal()
   }
 
