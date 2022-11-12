@@ -10,12 +10,15 @@ const classByStatus = {
 }
 
 function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
-  const { name, status, file } = fileItem
+  const { name, status, file, id } = fileItem
 
   const [statusState, setStatusState] = useState(status || 'loading')
   const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
 
   useEffect(() => {
+    // If the file is already saved in the db, we don't need to do anything
+    if (id) return
+
     if (typeof file !== 'object') return
 
     if (status === 'completed' || progressValue >= 100) return
@@ -32,6 +35,7 @@ function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
       setStatusState('completed')
       const url = fileReader.result
       setCompleted({ name, url })
+
       saveFile(fileItem)
     }
 
