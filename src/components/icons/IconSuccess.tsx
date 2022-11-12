@@ -1,12 +1,11 @@
 import React from 'react'
 
-function IconSuccess({ className, color = 'black', size = 20 } = {}) {
+function IconSuccess({ size = 20 } = {}) {
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 16 16"
-      className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >

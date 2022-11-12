@@ -1,49 +1,50 @@
-import { useRef, useState } from 'react'
+import { ChangeEvent, DragEvent, FormEvent, useRef, useState } from 'react'
 
-export default function DropZone({ addFile }) {
-  const [fileState, setFileState] = useState(null)
+type DropZoneProps = {
+  onDrop: (file: File) => void
+}
 
-  const dropZoneRef = useRef(null)
+export default function DropZone({ onDrop }: DropZoneProps) {
+  const [fileState, setFileState] = useState<File | null>(null)
 
-  const handleDragEnter = (event) => {
+  const dropZoneRef = useRef<HTMLLabelElement>(null)
+
+  const handleDragEnter = (event: DragEvent<HTMLLabelElement>) => {
     event.preventDefault()
   }
-  const handleDragOver = (event) => {
+  const handleDragOver = (event: DragEvent<HTMLLabelElement>) => {
     event.preventDefault()
+    if (!dropZoneRef.current) return
     event.dataTransfer.dropEffect = 'move'
     dropZoneRef.current.classList.add('active')
   }
-  const handleDragLeave = (event) => {
+  const handleDragLeave = (event: DragEvent<HTMLLabelElement>) => {
     event.preventDefault()
+    if (!dropZoneRef.current) return
     dropZoneRef.current.classList.remove('active')
   }
 
-  const handleDrop = (event) => {
+  const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
     event.preventDefault()
+    if (!dropZoneRef.current) return
     const file = event.dataTransfer.files[0]
     dropZoneRef.current.classList.remove('active')
     setFileState(file)
   }
 
-  const handleChange = (event) => {
-    const file = event.target.files[0]
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target
+    if (!files) return
+    const file = files[0]
     setFileState(file)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (!fileState) return
 
-    const file = {
-      name: fileState.name,
-      type: fileState.type,
-      size: fileState.size,
-      status: fileState.size === 0 ? 'completed' : 'loading',
-      file: fileState,
-    }
-
-    addFile(file)
+    onDrop(fileState)
     setFileState(null)
   }
 

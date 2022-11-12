@@ -1,13 +1,12 @@
 import React from 'react'
 
-function IconClose({ className, color = 'black', size = 20 } = {}) {
+function IconClose({ size = 20 } = {}) {
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 16 16"
       fill="none"
-      className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

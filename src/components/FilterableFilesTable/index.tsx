@@ -1,4 +1,11 @@
-export default function FilterableFilesTable({ children, clearComplete }) {
+import { ReactNode } from 'react'
+
+type Props = {
+  children: ReactNode | ReactNode[]
+  clearComplete: () => void
+}
+
+export default function FilterableFilesTable({ children, clearComplete }: Props) {
   const handleClick = () => {
     clearComplete()
   }

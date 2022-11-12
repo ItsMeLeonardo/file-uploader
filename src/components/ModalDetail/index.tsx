@@ -1,10 +1,18 @@
+import { MouseEvent, SyntheticEvent } from 'react'
 import { formatBytes } from '../../services/formatBytes'
 import { cutTextWithEllipsis } from '../../services/cutTextWithEllipsis'
+import { FileUP } from '../../entities/File'
 
-function ModalDetail({ file, closeModal, deleteFile }) {
-  const handleClickModalBody = (e) => e.stopPropagation()
+type Props = {
+  file: FileUP
+  closeModal: () => void
+  deleteFile: (params: any) => void
+}
 
-  const handleError = (event) => {
+function ModalDetail({ file, closeModal, deleteFile }: Props) {
+  const handleClickModalBody = (e: MouseEvent<HTMLDivElement>) => e.stopPropagation()
+
+  const handleError = (event: any) => {
     const img = event.target.closest('img')
     const picture = img.parentElement
     picture.classList.add('without-preview')
@@ -25,9 +33,9 @@ function ModalDetail({ file, closeModal, deleteFile }) {
         <div className="Modal-data">
           <header className="Modal-data-item">
             <h1>{cutTextWithEllipsis({ text: file.name, size: 15 })}</h1>
-            <span>{formatBytes(file.size)}</span>
+            <span>{formatBytes(file.file.size)}</span>
           </header>
-          <span className="Modal-data-item">{file.type}</span>
+          <span className="Modal-data-item">{file.file.type}</span>
         </div>
       </div>
       <footer className="Modal-footer">

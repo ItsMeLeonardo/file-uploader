@@ -5,34 +5,39 @@ import IconGallery from '../icons/IconGallery'
 import IconVideo from '../icons/IconVideo'
 import IconDocument from '../icons/IconDocument'
 import IconLayer from '../icons/IconLayer'
+import { Filters } from '../../entities/Filter'
 
-const getIconByFilterName = ({ name, isActive }) => {
-  const color = isActive ? 'rgb(255, 142, 60)' : '#2a2a2a'
-  const className = 'Filter-icon'
+type Props = {
+  name: Filters
+  isActive?: boolean
+  filterBy: any
+}
+
+const getIconByFilterName = (name: Filters) => {
   switch (name) {
     case 'All':
-      return <IconAll className={className} color={color} />
+      return <IconAll />
     case 'Images':
-      return <IconGallery className={className} color={color} />
+      return <IconGallery />
     case 'Videos':
-      return <IconVideo className={className} color={color} />
+      return <IconVideo />
     case 'Documents':
-      return <IconDocument className={className} color={color} />
+      return <IconDocument />
     case 'Others':
-      return <IconLayer className={className} color={color} />
+      return <IconLayer />
     default:
       return null
   }
 }
 
-function FilterItem({ isActive = false, name, filterBy } = {}) {
+function FilterItem({ isActive = false, name, filterBy }: Props) {
   const handleClick = () => {
     filterBy(name)
   }
 
   return (
     <li onClick={handleClick} className={`Filter-item ${isActive ? 'active' : ''}`}>
-      {getIconByFilterName({ name, isActive })}
+      {getIconByFilterName(name)}
       <span className="Filter-text">{name}</span>
     </li>
   )

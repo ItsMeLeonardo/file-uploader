@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react'
+import { FileUP } from '../../entities/File'
 
 import IconClose from '../icons/IconClose'
 import IconSuccess from '../icons/IconSuccess'
 
-const classByStatus = {
+const classByStatus: any = {
   loading: '',
   completed: 'completed',
   cancel: 'cancel',
 }
 
-function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
+type Props = {
+  fileItem: FileUP
+  deleteFile: (params: any) => void
+  setCompleted: (params: any) => void
+  saveFile: (params: any) => void
+  seeDetail: () => void
+}
+
+function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }: Props) {
   const { name, status, file, id } = fileItem
 
   const [statusState, setStatusState] = useState(status || 'loading')
@@ -26,7 +35,7 @@ function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
     const fileReader = new FileReader()
     fileReader.readAsDataURL(file)
 
-    const getProgressPercent = (event) => {
+    const getProgressPercent = (event: ProgressEvent<FileReader>) => {
       const progress = Math.round((event.loaded / event.total) * 100)
       setProgressValue(progress)
     }
@@ -66,14 +75,15 @@ function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }) {
         </button>
 
         {statusState === 'completed' ? (
-          <IconSuccess className="File-icon" color="#44D937" />
+          <IconSuccess />
         ) : (
           <div role="button" onClick={handleCancel}>
-            <IconClose className="File-icon" color="#D9376E" />
+            <IconClose />
           </div>
         )}
       </div>
       <div className="progress-bar">
+        {/* @ts-ignore: Unreachable code */}
         <span className="bar" style={{ '--progress': `${progressValue}%` }} />
       </div>
     </li>

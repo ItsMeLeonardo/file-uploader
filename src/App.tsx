@@ -3,56 +3,66 @@ import { ToastContainer } from 'react-toastify'
 import { useFile } from './hooks/useFile'
 
 import DropZone from './components/DropZone'
-import Filters from './components/Filters'
+import FiltersList from './components/Filters'
 import FileList from './components/FileList'
 import FilterableFilesTable from './components/FilterableFilesTable'
 import FilterItem from './components/FilterItem'
 
-const FILTERS = [
+import type { FilterFunc, Filters } from './entities/Filter'
+import type { FileUP, FileStatus } from './entities/File'
+
+const FILTERS: FilterFunc[] = [
   {
     name: 'All',
     filter: () => true,
   },
   {
     name: 'Images',
-    filter: (file) => file.type.startsWith('image/'),
+    filter: ({ file }) => file.type.startsWith('image/'),
   },
   {
     name: 'Videos',
-    filter: (file) => file.type.startsWith('video/'),
+    filter: ({ file }) => file.type.startsWith('video/'),
   },
   {
     name: 'Documents',
-    filter: (file) => file.type.startsWith('application/'),
+    filter: ({ file }) => file.type.startsWith('application/'),
   },
   {
     name: 'Others',
-    filter: (file) => file.type.includes('text/'),
+    filter: ({ file }) => file.type.includes('text/'),
   },
 ]
 
 export default function App() {
-  const [filter, setFilter] = useState('All')
+  const [filter, setFilter] = useState<Filters>('All')
   const { deleteAllFromService, deleteFromService, getFiles } = useFile()
-  const [files, setFiles] = useState([])
+  const [files, setFiles] = useState<FileUP[]>([])
 
   useEffect(() => {
-    getFiles().then((files) => setFiles(files))
+    getFiles().then((files: FileUP[]) => setFiles(files))
   }, [])
 
-  const filterFunc = FILTERS.find(({ name }) => name === filter).filter
-  const filesToShow = files.filter(filterFunc)
+  const filterFunc = FILTERS.find(({ name }) => name === filter)?.filter
+  const filesToShow = filterFunc && filter !== 'All' ? files.filter(filterFunc) : files
 
   const deleteFile = useCallback(
-    ({ name, id }) => {
-      setFiles(files.filter((file) => file.name !== name))
-      deleteFromService({ id })
+    ({ name, id }: FileUP) => {
+      if (!id) return
+      setFiles(files.filter(({ file }) => file.name !== name))
+      deleteFromService(id)
     },
     [files],
   )
 
-  const addFile = (file) => {
-    setFiles([...files, file])
+  const addFile = (file: File) => {
+    const fileUP: FileUP = {
+      name: file.name,
+      file,
+      status: 'loading',
+    }
+
+    setFiles([...files, fileUP])
   }
 
   const clearComplete = useCallback(() => {
@@ -64,7 +74,7 @@ export default function App() {
     deleteAllFromService()
   }, [])
 
-  const setCompleted = useCallback(({ name, url }) => {
+  const setCompleted = useCallback(({ name, url }: FileUP) => {
     setFiles((prevFiles) =>
       prevFiles.map((file) => {
         if (file.name === name) {
@@ -82,9 +92,9 @@ export default function App() {
   return (
     <section className="Section-grid">
       <header className="Logo">UpCloud</header>
-      <DropZone addFile={addFile} />
+      <DropZone onDrop={addFile} />
       <FilterableFilesTable clearComplete={clearComplete}>
-        <Filters>
+        <FiltersList>
           {FILTERS.map(({ name }) => (
             <FilterItem
               key={name}
@@ -93,7 +103,7 @@ export default function App() {
               name={name}
             />
           ))}
-        </Filters>
+        </FiltersList>
         <FileList
           files={filesToShow}
           deleteFile={deleteFile}

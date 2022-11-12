@@ -1,4 +1,4 @@
-export default function IconAll({ className } = {}) {
+export default function IconAll({ className }: { className?: string }) {
   return (
     <svg
       width="20"

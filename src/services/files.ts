@@ -1,4 +1,5 @@
 import { openDB } from 'idb'
+import { FileUP } from '../entities/File'
 
 const STORE_NAME = 'files'
 
@@ -9,13 +10,13 @@ const dbPromise = openDB('files', 1, {
   },
 })
 
-export const getFiles = async () => {
+export const getFiles = async (): Promise<FileUP[]> => {
   const result = (await dbPromise).getAll(STORE_NAME)
   const response = await result
-  console.log('getFiles', response)
+
   return response
 }
-export const saveFile = async (file) => {
+export const saveFile = async (file: FileUP) => {
   const result = (await dbPromise).put(STORE_NAME, file)
 }
 export const updateService = async () => {
@@ -23,7 +24,7 @@ export const updateService = async () => {
   console.log(await result)
 }
 
-export const deleteFile = async (id) => {
+export const deleteFile = async (id: number | string) => {
   const result = (await dbPromise).delete(STORE_NAME, id)
   console.log(await result)
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FileUP } from '../../entities/File'
 import { useFile } from '../../hooks/useFile'
 import { useToggle } from '../../hooks/useToggle'
 
@@ -6,12 +7,18 @@ import FileItem from '../FileItem'
 import ModalContainer from '../Modal'
 import ModalDetail from '../ModalDetail'
 
-export default function FileList({ files, deleteFile, setCompleted }) {
+type Props = {
+  files: FileUP[]
+  deleteFile: (file: FileUP) => void
+  setCompleted: (file: FileUP) => void
+}
+
+export default function FileList({ files, deleteFile, setCompleted }: Props) {
   const [modalIsOpen, toggleModal] = useToggle()
   const { saveInService } = useFile()
-  const [fileDetail, setFileDetail] = useState(null)
+  const [fileDetail, setFileDetail] = useState<FileUP | null>(null)
 
-  const handleSeeDetail = (file) => {
+  const handleSeeDetail = (file: FileUP) => {
     toggleModal()
     setFileDetail(file)
   }
@@ -30,7 +37,7 @@ export default function FileList({ files, deleteFile, setCompleted }) {
           />
         ))}
       </ul>
-      {modalIsOpen && (
+      {modalIsOpen && fileDetail && (
         <ModalContainer onClick={toggleModal}>
           <ModalDetail
             file={fileDetail}
