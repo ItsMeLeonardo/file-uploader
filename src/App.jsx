@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { ToastContainer } from 'react-toastify'
 import { useFile } from './hooks/useFile'
 
 import DropZone from './components/DropZone'
@@ -99,6 +100,7 @@ export default function App() {
           setCompleted={setCompleted}
         />
       </FilterableFilesTable>
+      <ToastContainer />
     </section>
   )
 }
