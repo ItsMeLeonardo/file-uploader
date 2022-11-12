@@ -30,7 +30,7 @@ const FILTERS = [
   },
 ]
 
-function App() {
+export default function App() {
   const [filter, setFilter] = useState('All')
   const { deleteAllFromService, deleteFromService, getFiles } = useFile()
   const [files, setFiles] = useState([])
@@ -102,5 +102,3 @@ function App() {
     </section>
   )
 }
-
-export default App
