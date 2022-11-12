@@ -5,3 +5,5 @@ dist-ssr
 *.local
 .idea
 .vercel
+
+package-lock.json
