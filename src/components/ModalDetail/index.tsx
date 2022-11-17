@@ -6,7 +6,7 @@ import { FileUP } from '../../entities/File'
 type Props = {
   file: FileUP
   closeModal: () => void
-  deleteFile: (params: any) => void
+  deleteFile?: (file: FileUP) => void
 }
 
 function ModalDetail({ file, closeModal, deleteFile }: Props) {
@@ -20,15 +20,15 @@ function ModalDetail({ file, closeModal, deleteFile }: Props) {
   }
 
   const handleDelete = () => {
-    deleteFile({ name: file.name, id: file.id })
     closeModal()
+    if (deleteFile) deleteFile(file)
   }
 
   return (
     <div className="Modal" onClick={handleClickModalBody}>
       <div className="Modal-body">
         <picture className="Modal-img">
-          <img src={file.url} alt="modal" onError={handleError} />
+          <img src={file.thumbnail} alt="modal" onError={handleError} />
         </picture>
         <div className="Modal-data">
           <header className="Modal-data-item">

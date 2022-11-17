@@ -317,6 +317,10 @@ img {
   text-overflow: ellipsis;
 }
 
+.icon-success {
+  color: var(--success);
+}
+
 .progress-bar {
   width: calc(100% - 1rem);
   height: 4px;

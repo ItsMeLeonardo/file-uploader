@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FileUP } from '../../entities/File'
+import { useFile } from '../../store/file'
+import { generateVideoThumbnail } from '../../utils/video'
 
 import IconClose from '../icons/IconClose'
 import IconSuccess from '../icons/IconSuccess'
@@ -12,40 +14,40 @@ const classByStatus: any = {
 
 type Props = {
   fileItem: FileUP
-  deleteFile: (params: any) => void
-  setCompleted: (params: any) => void
-  saveFile: (params: any) => void
   seeDetail: () => void
 }
 
-function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }: Props) {
+export default function FileItem({ fileItem, seeDetail }: Props) {
+  const { loadFile } = useFile()
+
   const { name, status, file, id } = fileItem
 
-  const [statusState, setStatusState] = useState(status || 'loading')
   const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
 
   useEffect(() => {
     // If the file is already saved in the db, we don't need to do anything
-    if (id) return
 
     if (typeof file !== 'object') return
 
     if (status === 'completed' || progressValue >= 100) return
-
-    const fileReader = new FileReader()
-    fileReader.readAsDataURL(file)
 
     const getProgressPercent = (event: ProgressEvent<FileReader>) => {
       const progress = Math.round((event.loaded / event.total) * 100)
       setProgressValue(progress)
     }
 
-    const handleLoadFile = () => {
-      setStatusState('completed')
-      const url = fileReader.result
-      setCompleted({ name, url })
+    const fileReader = new FileReader()
+    fileReader.readAsDataURL(file)
 
-      saveFile(fileItem)
+    const handleLoadFile = async () => {
+      const url = fileReader.result
+      let thumbnail = typeof url === 'string' ? url : undefined
+      if (file.type.includes('video')) {
+        thumbnail = await generateVideoThumbnail(file)
+      }
+      if (url && typeof url === 'string') {
+        loadFile(id, url, thumbnail)
+      }
     }
 
     fileReader.addEventListener('progress', getProgressPercent)
@@ -59,14 +61,11 @@ function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }: P
   }, [])
 
   const handleCancel = () => {
-    setStatusState('cancel')
-    setTimeout(() => {
-      deleteFile({ name })
-    }, 1000)
+    console.log('cancel')
   }
 
   return (
-    <li className={`File-item ${classByStatus[statusState]}`}>
+    <li className={`File-item ${classByStatus[status]}`}>
       <div className="File-info">
         <h2 className="File-text">{name}</h2>
         <span className="File-progress">{progressValue}%</span>
@@ -74,8 +73,10 @@ function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }: P
           Details
         </button>
 
-        {statusState === 'completed' ? (
-          <IconSuccess />
+        {status === 'completed' ? (
+          <span className="icon-success">
+            <IconSuccess />
+          </span>
         ) : (
           <div role="button" onClick={handleCancel}>
             <IconClose />
@@ -89,5 +90,3 @@ function FileItem({ fileItem, deleteFile, setCompleted, saveFile, seeDetail }: P
     </li>
   )
 }
-
-export default React.memo(FileItem)

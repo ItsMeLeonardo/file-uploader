@@ -10,7 +10,7 @@ import { Filters } from '../../entities/Filter'
 type Props = {
   name: Filters
   isActive?: boolean
-  filterBy: any
+  onClick?: (filter: Filters) => void
 }
 
 const getIconByFilterName = (name: Filters) => {
@@ -30,17 +30,19 @@ const getIconByFilterName = (name: Filters) => {
   }
 }
 
-function FilterItem({ isActive = false, name, filterBy }: Props) {
+export default function FilterItem({ isActive = false, name, onClick }: Props) {
   const handleClick = () => {
-    filterBy(name)
+    onClick && onClick(name)
   }
 
   return (
-    <li onClick={handleClick} className={`Filter-item ${isActive ? 'active' : ''}`}>
+    <li
+      onClick={handleClick}
+      className={`Filter-item ${isActive ? 'active' : ''}`}
+      role="button"
+    >
       {getIconByFilterName(name)}
       <span className="Filter-text">{name}</span>
     </li>
   )
 }
-
-export default React.memo(FilterItem)

@@ -1,7 +1,7 @@
-import { ChangeEvent, DragEvent, FormEvent, useRef, useState } from 'react'
+import { ChangeEvent, DragEvent, FormEvent, useRef, useState, useEffect } from 'react'
 
 type DropZoneProps = {
-  onDrop: (file: File) => void
+  onDrop?: (file: File) => void
 }
 
 export default function DropZone({ onDrop }: DropZoneProps) {
@@ -44,9 +44,17 @@ export default function DropZone({ onDrop }: DropZoneProps) {
 
     if (!fileState) return
 
-    onDrop(fileState)
+    onDrop && onDrop(fileState)
     setFileState(null)
   }
+
+  const preview =
+    fileState && fileState.type.includes('image') ? URL.createObjectURL(fileState) : null
+
+  useEffect(() => {
+    if (!preview) return
+    return () => URL.revokeObjectURL(preview)
+  }, [preview])
 
   return (
     <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -58,6 +66,7 @@ export default function DropZone({ onDrop }: DropZoneProps) {
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         ref={dropZoneRef}
+        style={{ background: preview ? `url(${preview}) center/cover no-repeat` : '' }}
       >
         <div className="Drop-content">
           <h2 className="Drop-text">
