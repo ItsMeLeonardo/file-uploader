@@ -41,8 +41,10 @@ export default function FileItem({ fileItem, seeDetail }: Props) {
 
     const handleLoadFile = async () => {
       const url = fileReader.result
-      let thumbnail = typeof url === 'string' ? url : undefined
-      if (file.type.includes('video')) {
+      const fileType = file.type
+      let thumbnail =
+        typeof url === 'string' && fileType.includes('image') ? url : undefined
+      if (fileType.includes('video')) {
         thumbnail = await generateVideoThumbnail(file)
       }
       if (url && typeof url === 'string') {
