@@ -9,8 +9,9 @@ import { useFile } from './store/file'
 export default function App() {
   const { addFile } = useFile()
 
-  const handleDropZone = (file: File) => {
-    addFile(file)
+  const handleDropZone = (files: File[]) => {
+    files.forEach((file) => addFile(file))
+    // addFile(file)
   }
 
   return (
