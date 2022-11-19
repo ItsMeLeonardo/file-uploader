@@ -26,7 +26,7 @@ const useFileStore = create<FileStore>((set, get) => ({
   files: [],
   addFile: (file: FileUP) => {
     const { files } = get()
-    set({ files: [...files, file] })
+    set({ files: [file, ...files] })
   },
   setFileState: (id: string, status: FileStatus) => {
     const { files } = get()
