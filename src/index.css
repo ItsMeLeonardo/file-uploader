@@ -261,11 +261,11 @@ img {
   height: 60px;
   border-radius: 1rem;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  gap: 0.5rem;
   transition: var(--transition);
   border: 2px solid transparent;
+  padding: 0.5rem;
 }
 
 .File-item .btn-text {
@@ -296,12 +296,40 @@ img {
   border: 2px solid;
 }
 
+.File-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-grow: 1;
+}
+
+.File-thumbnail {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.5rem;
+  background: var(--main-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  line-height: 100%;
+}
+.File-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  display: flex;
+}
+
 .File-info {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 0.5rem;
   font-weight: 500;
   font-size: 14px;
   color: var(--color-text);
@@ -322,7 +350,7 @@ img {
 }
 
 .progress-bar {
-  width: calc(100% - 1rem);
+  width: 100%;
   height: 4px;
   background: var(--white);
   border-radius: 0.5rem;

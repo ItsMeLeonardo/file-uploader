@@ -64,28 +64,40 @@ export default function FileItem({ fileItem, seeDetail }: Props) {
     console.log('cancel')
   }
 
+  const hasThumbnail =
+    fileItem.file.type.includes('image') || fileItem.file.type.includes('video')
+
   return (
     <li className={`File-item ${classByStatus[status]}`}>
-      <div className="File-info">
-        <h2 className="File-text">{name}</h2>
-        <span className="File-progress">{progressValue}%</span>
-        <button className="File-detail btn btn-text" onClick={seeDetail}>
-          Details
-        </button>
+      {hasThumbnail ? (
+        <picture className="File-thumbnail">
+          <img src={fileItem.thumbnail} />
+        </picture>
+      ) : (
+        <div className="File-thumbnail">{fileItem.file.name.split('.').pop()}</div>
+      )}
+      <div className="File-data">
+        <div className="File-info">
+          <h2 className="File-text">{name}</h2>
+          <span className="File-progress">{progressValue}%</span>
+          <button className="File-detail btn btn-text" onClick={seeDetail}>
+            Details
+          </button>
 
-        {status === 'completed' ? (
-          <span className="icon-success">
-            <IconSuccess />
-          </span>
-        ) : (
-          <div role="button" onClick={handleCancel}>
-            <IconClose />
-          </div>
-        )}
-      </div>
-      <div className="progress-bar">
-        {/* @ts-ignore: Unreachable code */}
-        <span className="bar" style={{ '--progress': `${progressValue}%` }} />
+          {status === 'completed' ? (
+            <span className="icon-success">
+              <IconSuccess />
+            </span>
+          ) : (
+            <div role="button" onClick={handleCancel}>
+              <IconClose />
+            </div>
+          )}
+        </div>
+        <div className="progress-bar">
+          {/* @ts-ignore: Unreachable code */}
+          <span className="bar" style={{ '--progress': `${progressValue}%` }} />
+        </div>
       </div>
     </li>
   )
