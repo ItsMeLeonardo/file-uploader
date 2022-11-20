@@ -53,8 +53,8 @@ img {
   height: 0.25rem;
 }
 
-::-webkit-scrollbar-track {
-}
+/* ::-webkit-scrollbar-track {
+} */
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-text);
@@ -327,7 +327,8 @@ img {
 
 .File-info {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 0.7fr 0.1fr 0.1fr 0.1fr;
   align-items: center;
   justify-content: space-between;
   font-weight: 500;
@@ -339,7 +340,7 @@ img {
   font-size: 16px;
   font-weight: 500;
   color: var(--color-text);
-  max-width: 100px;
+  max-width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
