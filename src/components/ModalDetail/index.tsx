@@ -27,9 +27,22 @@ function ModalDetail({ file, closeModal, deleteFile }: Props) {
   return (
     <div className="Modal" onClick={handleClickModalBody}>
       <div className="Modal-body">
-        <picture className="Modal-img">
-          <img src={file.thumbnail} alt="modal" onError={handleError} />
-        </picture>
+        {file.file.type.includes('video') ? (
+          <video
+            className="Modal-img"
+            muted
+            style={{ background: 'transparent' }}
+            poster={file.thumbnail}
+            controls
+          >
+            <source src={file.url} type={file.file.type}></source>
+          </video>
+        ) : (
+          <picture className="Modal-img">
+            <img src={file.thumbnail} alt="modal" onError={handleError} />
+          </picture>
+        )}
+
         <div className="Modal-data">
           <header className="Modal-data-item">
             <h1>{cutTextWithEllipsis({ text: file.name, size: 15 })}</h1>
