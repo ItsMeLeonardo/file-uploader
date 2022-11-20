@@ -3,6 +3,8 @@ import { FileUP } from '../entities/File'
 
 const STORE_NAME = 'files'
 
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
 const dbPromise = openDB('files', 1, {
   upgrade(db) {
     const store = db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true })
@@ -17,14 +19,15 @@ export const getFiles = async (): Promise<FileUP[]> => {
   return response
 }
 export const saveFile = async (file: FileUP) => {
-  const result = (await dbPromise).put(STORE_NAME, file)
+  const response = (await dbPromise).put(STORE_NAME, file)
+  const result = await response
 }
 export const updateService = async () => {
-  const result = (await dbPromise).clear(STORE_NAME)
-  console.log(await result)
+  const response = (await dbPromise).clear(STORE_NAME)
+  const result = await response
 }
 
 export const deleteFile = async (id: number | string) => {
-  const result = (await dbPromise).delete(STORE_NAME, id)
-  console.log(await result)
+  const response = (await dbPromise).delete(STORE_NAME, id)
+  const result = await response
 }

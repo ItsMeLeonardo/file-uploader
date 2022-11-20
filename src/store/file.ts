@@ -8,14 +8,18 @@ import { FileUP, FileStatus } from '../entities/File'
 import { getFilterFunc } from '../entities/Filter'
 import { useFilter } from './filter'
 
+import * as service from '../services/files'
+
 type State = {
   files: FileUP[]
 }
 
 type Actions = {
+  setFiles: (files: FileUP[]) => void
   addFile: (file: FileUP) => void
+  addMultipleFiles: (files: FileUP[]) => void
   removeFile: (id: string) => void
-  setFileState: (id: string, status: FileStatus) => void
+  setFileStatus: (id: string, status: FileStatus) => void
   loadFile: (id: string, url: string, thumbnail?: string) => void
   getFileById: (id: string) => FileUP | undefined
 }
@@ -28,7 +32,11 @@ const useFileStore = create<FileStore>((set, get) => ({
     const { files } = get()
     set({ files: [file, ...files] })
   },
-  setFileState: (id: string, status: FileStatus) => {
+  addMultipleFiles: (files: FileUP[]) => {
+    const { files: currentFiles } = get()
+    set({ files: [...files, ...currentFiles] })
+  },
+  setFileStatus: (id: string, status: FileStatus) => {
     const { files } = get()
     const newFiles = files.map((file) => {
       if (file.id === id) {
@@ -57,19 +65,33 @@ const useFileStore = create<FileStore>((set, get) => ({
     })
     set({ files: newFiles })
   },
+  setFiles: (files) => {
+    set({ files })
+  },
 }))
 
 const extractor = (state: FileStore): FileStore => ({
   files: state.files,
   addFile: state.addFile,
+  addMultipleFiles: state.addMultipleFiles,
   removeFile: state.removeFile,
-  setFileState: state.setFileState,
+  setFileStatus: state.setFileStatus,
   getFileById: state.getFileById,
   loadFile: state.loadFile,
+  setFiles: state.setFiles,
 })
 
+const createFileUP = (file: File): FileUP => {
+  const fileUP: FileUP = {
+    id: nanoid(),
+    file,
+    name: file.name,
+    status: 'loading',
+  }
+  return fileUP
+}
+
 export const useFile = () => {
-  //TODO: integrate with service
   const { filter } = useFilter()
   const store = useFileStore(extractor, shallow)
 
@@ -79,24 +101,39 @@ export const useFile = () => {
     return filterFunc(fileType)
   })
 
-  const addFile = (file: File) => {
-    const fileUP: FileUP = {
-      id: nanoid(),
-      file,
-      name: file.name,
-      status: 'loading',
+  const setInitialState = async () => {
+    const files = await service.getFiles()
+    store.setFiles(files)
+  }
+
+  const addFile = (file: File[] | File) => {
+    if (!Array.isArray(file)) {
+      const fileUP = createFileUP(file)
+      store.addFile(fileUP)
+      return
     }
-    store.addFile(fileUP)
+    if (file.length === 1) {
+      const fileUP = createFileUP(file[0])
+      store.addFile(fileUP)
+      return
+    }
+    const files = file.map((file) => {
+      return createFileUP(file)
+    })
+
+    store.addMultipleFiles(files)
   }
 
   const removeFile = (id: string) => {
     store.removeFile(id)
+    service.deleteFile(id)
   }
 
   const removeCompletedFiles = () => {
     store.files.forEach((file) => {
       if (file.status === 'completed') {
         store.removeFile(file.id)
+        service.deleteFile(file.id)
       }
     })
   }
@@ -108,8 +145,10 @@ export const useFile = () => {
   const loadFile = (id: string, url: string, thumbnail?: string) => {
     try {
       store.loadFile(id, url, thumbnail)
+      const file = store.getFileById(id)
+      if (file) service.saveFile(file)
     } catch (error) {
-      store.setFileState(id, 'error')
+      store.setFileStatus(id, 'error')
     }
   }
 
@@ -120,6 +159,7 @@ export const useFile = () => {
     getFileById,
     removeCompletedFiles,
     loadFile,
+    setInitialState,
   }
 }
 
