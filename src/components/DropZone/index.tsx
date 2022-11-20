@@ -1,12 +1,10 @@
-import { ChangeEvent, DragEvent, FormEvent, useRef, useState, useEffect } from 'react'
+import { ChangeEvent, DragEvent, useRef } from 'react'
 
 type DropZoneProps = {
-  onDrop?: (file: File) => void
+  onDrop?: (files: File[]) => void
 }
 
 export default function DropZone({ onDrop }: DropZoneProps) {
-  const [fileState, setFileState] = useState<File | null>(null)
-
   const dropZoneRef = useRef<HTMLLabelElement>(null)
 
   const handleDragEnter = (event: DragEvent<HTMLLabelElement>) => {
@@ -27,37 +25,22 @@ export default function DropZone({ onDrop }: DropZoneProps) {
   const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
     event.preventDefault()
     if (!dropZoneRef.current) return
-    const file = event.dataTransfer.files[0]
+    const files = Array.from(event.dataTransfer.files)
+
     dropZoneRef.current.classList.remove('active')
-    setFileState(file)
+
+    onDrop && onDrop(files)
   }
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target
-    if (!files) return
-    const file = files[0]
-    setFileState(file)
+    if (!event.target.files) return
+    const files = Array.from(event.target.files)
+
+    onDrop && onDrop(files)
   }
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    if (!fileState) return
-
-    onDrop && onDrop(fileState)
-    setFileState(null)
-  }
-
-  const preview =
-    fileState && fileState.type.includes('image') ? URL.createObjectURL(fileState) : null
-
-  useEffect(() => {
-    if (!preview) return
-    return () => URL.revokeObjectURL(preview)
-  }, [preview])
 
   return (
-    <form onSubmit={handleSubmit} encType="multipart/form-data">
+    <div>
       <label
         htmlFor="file"
         className="layout Drop-zone"
@@ -66,25 +49,27 @@ export default function DropZone({ onDrop }: DropZoneProps) {
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         ref={dropZoneRef}
-        style={{ background: preview ? `url(${preview}) center/cover no-repeat` : '' }}
       >
         <div className="Drop-content">
-          <h2 className="Drop-text">
-            {fileState
-              ? `Change file: ${fileState.name.slice(0, 30)}...`
-              : 'Drop file or click to upload file'}
-          </h2>
+          <h2 className="Drop-text">Drag and drop your files</h2>
 
           <p className="Drop-divider">
-            <span>And</span>
+            <span>Or</span>
           </p>
 
-          <input type="file" name="file" id="file" hidden onChange={handleChange} />
-          <button className="btn btn-gradient" disabled={!fileState}>
-            Upload file
-          </button>
+          <input
+            type="file"
+            name="file"
+            id="file"
+            hidden
+            onChange={handleChange}
+            multiple
+          />
+          <span role="button" className="btn btn-gradient">
+            Search file
+          </span>
         </div>
       </label>
-    </form>
+    </div>
   )
 }

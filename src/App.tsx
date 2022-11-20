@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 
 import DropZone from './components/DropZone'
@@ -7,10 +8,14 @@ import FilterableFilesTable from './components/FilterableFilesTable'
 import { useFile } from './store/file'
 
 export default function App() {
-  const { addFile } = useFile()
+  const { addFile, setInitialState } = useFile()
 
-  const handleDropZone = (file: File) => {
-    addFile(file)
+  useEffect(() => {
+    setInitialState()
+  }, [])
+
+  const handleDropZone = (files: File[] | File) => {
+    addFile(files)
   }
 
   return (
