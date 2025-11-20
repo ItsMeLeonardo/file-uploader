@@ -5,6 +5,7 @@ import DropZone from './components/DropZone'
 import FiltersList from './components/FilterList'
 import FileList from './components/FileList'
 import FilterableFilesTable from './components/FilterableFilesTable'
+import FolderList from './components/FolderList'
 import { useFile } from './store/file'
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
     <section className="Section-grid">
       <header className="Logo">UpCloud</header>
       <DropZone onDrop={handleDropZone} />
+      <FolderList />
       <FilterableFilesTable>
         <FiltersList />
         <FileList />
