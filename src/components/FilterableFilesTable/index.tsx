@@ -31,7 +31,9 @@ export default function FilterableFilesTable({ children }: Props) {
 
   return (
     <aside
-      className={`layout FilterableFiles-content ${isDropTarget ? 'dropping' : ''}`}
+      className={`layout FilterableFiles FilterableFiles-content ${
+        isDropTarget ? 'dropping' : ''
+      }`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
