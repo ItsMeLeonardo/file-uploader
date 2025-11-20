@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid'
 import { FileUP, FileStatus } from '../entities/File'
 import { getFilterFunc } from '../entities/Filter'
 import { useFilter } from './filter'
+import { useFolder } from './folder'
 
 import * as service from '../services/files'
 
@@ -20,6 +21,7 @@ type Actions = {
   addMultipleFiles: (files: FileUP[]) => void
   removeFile: (id: string) => void
   setFileStatus: (id: string, status: FileStatus) => void
+  setFileFolder: (id: string, folderId: string | null) => void
   loadFile: (id: string, url: string, thumbnail?: string) => void
   getFileById: (id: string) => FileUP | undefined
 }
@@ -51,6 +53,13 @@ const useFileStore = create<FileStore>((set, get) => ({
     const newFiles = files.filter((file) => file.id !== id)
     set({ files: newFiles })
   },
+  setFileFolder: (id, folderId) => {
+    const { files } = get()
+    const newFiles = files.map((file) =>
+      file.id === id ? { ...file, folderId } : file
+    )
+    set({ files: newFiles })
+  },
   getFileById: (id) => {
     const { files } = get()
     return files.find((file) => file.id === id)
@@ -76,6 +85,7 @@ const extractor = (state: FileStore): FileStore => ({
   addMultipleFiles: state.addMultipleFiles,
   removeFile: state.removeFile,
   setFileStatus: state.setFileStatus,
+  setFileFolder: state.setFileFolder,
   getFileById: state.getFileById,
   loadFile: state.loadFile,
   setFiles: state.setFiles,
@@ -87,23 +97,32 @@ const createFileUP = (file: File): FileUP => {
     file,
     name: file.name,
     status: 'loading',
+    folderId: null,
   }
   return fileUP
 }
 
 export const useFile = () => {
   const { filter } = useFilter()
+  const { activeFolderId } = useFolder()
   const store = useFileStore(extractor, shallow)
 
-  const files = store.files.filter(({ file }) => {
+  const files = store.files.filter(({ file, folderId }) => {
     const filterFunc = getFilterFunc(filter)
     const fileType = file.type
-    return filterFunc(fileType)
+    const passesFilter = filterFunc(fileType)
+    const matchesFolderFilter = activeFolderId ? folderId === activeFolderId : true
+
+    return passesFilter && matchesFolderFilter
   })
 
   const setInitialState = async () => {
     const files = await service.getFiles()
-    store.setFiles(files)
+    const normalizedFiles = files.map((file) => ({
+      ...file,
+      folderId: file.folderId ?? null,
+    }))
+    store.setFiles(normalizedFiles)
   }
 
   const addFile = (file: File[] | File) => {
@@ -152,13 +171,21 @@ export const useFile = () => {
     }
   }
 
+  const moveFileToFolder = (id: string, folderId: string | null) => {
+    store.setFileFolder(id, folderId)
+    const file = store.getFileById(id)
+    if (file) service.saveFile(file)
+  }
+
   return {
     files,
+    allFiles: store.files,
     addFile,
     removeFile,
     getFileById,
     removeCompletedFiles,
     loadFile,
+    moveFileToFolder,
     setInitialState,
   }
 }

@@ -7,4 +7,5 @@ export type FileUP = {
   status: FileStatus
   url?: string
   thumbnail?: string
+  folderId?: string | null
 }

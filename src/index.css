@@ -465,6 +465,18 @@ img {
     align-items: flex-start;
 }
 
+.Folders-actions {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    color: rgba(42, 42, 42, 0.75);
+}
+
+.Folders-hint {
+    font-size: .85rem;
+    margin: 0;
+}
+
 .Folders-title {
     font-weight: 700;
     font-size: 1.1rem;
@@ -488,6 +500,20 @@ img {
     display: flex;
     flex-direction: column;
     gap: .65rem;
+    border: 1px solid transparent;
+    border-radius: 1rem;
+    padding: .35rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.Folder-card.active {
+    border-color: rgba(42, 42, 42, 0.08);
+    box-shadow: 0 18px 60px rgba(25, 1, 11, 0.06);
+    transform: translateY(-2px);
+}
+
+.Folder-card.drag-over {
+    border-color: var(--folder-color);
 }
 
 .Folder-visual {
@@ -577,6 +603,89 @@ img {
     border-radius: 999px;
     font-size: .8rem;
     font-weight: 500;
+}
+
+.Folder-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+}
+
+.Folder-count {
+    color: rgba(42, 42, 42, 0.65);
+    font-size: .85rem;
+}
+
+.Folder-form {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: .75rem;
+    padding: .75rem;
+}
+
+.Folder-form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: .75rem;
+}
+
+.Folder-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    font-size: .9rem;
+    color: rgba(42, 42, 42, 0.8);
+}
+
+.Folder-form-field input,
+.Folder-form-field select {
+    border: 1px solid rgba(42, 42, 42, 0.1);
+    border-radius: .65rem;
+    padding: .5rem .75rem;
+    background: #fff;
+}
+
+.Folder-form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Folder-color-picker {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.Folder-color-swatches {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+.Folder-color-swatch {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+}
+
+.Folder-color-swatch.selected {
+    border-color: #111;
+}
+
+.File-folder {
+    font-size: .8rem;
+    color: rgba(42, 42, 42, 0.75);
+    padding: .15rem .5rem;
+    background: rgba(42, 42, 42, 0.06);
+    border-radius: 999px;
+}
+
+.FilterableFiles-content.dropping {
+    border: 2px dashed rgba(42, 42, 42, 0.15);
 }
 
 @media (min-width: 768px) {

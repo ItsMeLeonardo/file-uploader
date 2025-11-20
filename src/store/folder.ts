@@ -36,17 +36,26 @@ const defaultFolders: Folder[] = [
 
 type State = {
   folders: Folder[]
+  activeFolderId: string | null
 }
 
 type Actions = {
   addFolder: (folder: Folder) => void
+  updateFolder: (folder: Folder) => void
+  setActiveFolder: (folderId: string | null) => void
 }
 
 type FolderStore = State & Actions
 
 const useFolderStore = create<FolderStore>((set) => ({
   folders: defaultFolders,
+  activeFolderId: null,
   addFolder: (folder) => set((state) => ({ folders: [folder, ...state.folders] })),
+  updateFolder: (folder) =>
+    set((state) => ({
+      folders: state.folders.map((item) => (item.id === folder.id ? folder : item)),
+    })),
+  setActiveFolder: (folderId) => set({ activeFolderId: folderId }),
 }))
 
 export const useFolder = () => useFolderStore()
