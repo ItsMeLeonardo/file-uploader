@@ -7,12 +7,20 @@ import IconGallery from '../icons/IconGallery'
 import IconVideo from '../icons/IconVideo'
 import IconDocument from '../icons/IconDocument'
 import IconLayer from '../icons/IconLayer'
+import IconCamera from '../icons/IconCamera'
+import IconMusic from '../icons/IconMusic'
+import IconCloud from '../icons/IconCloud'
+import IconStar from '../icons/IconStar'
 
 const ICON_OPTIONS: { value: FolderIcon; label: string; icon: JSX.Element }[] = [
   { value: 'gallery', label: 'Gallery', icon: <IconGallery /> },
   { value: 'video', label: 'Video', icon: <IconVideo /> },
   { value: 'document', label: 'Documents', icon: <IconDocument /> },
   { value: 'layer', label: 'Projects', icon: <IconLayer /> },
+  { value: 'camera', label: 'Camera', icon: <IconCamera /> },
+  { value: 'music', label: 'Music', icon: <IconMusic /> },
+  { value: 'cloud', label: 'Cloud', icon: <IconCloud /> },
+  { value: 'star', label: 'Favorites', icon: <IconStar /> },
 ]
 
 const COLOR_PRESETS = ['#d7e5ff', '#ffe6f1', '#fff0d7', '#e5f8f0', '#e9e9e9', '#d7d7ff']
@@ -20,9 +28,10 @@ const COLOR_PRESETS = ['#d7e5ff', '#ffe6f1', '#fff0d7', '#e5f8f0', '#e9e9e9', '#
 type Props = {
   folder?: Folder | null
   onSaved?: () => void
+  onCancel?: () => void
 }
 
-export default function FolderForm({ folder, onSaved }: Props) {
+export default function FolderForm({ folder, onSaved, onCancel }: Props) {
   const { addFolder, updateFolder } = useFolder()
 
   const [name, setName] = useState(folder?.name ?? '')
@@ -136,9 +145,10 @@ export default function FolderForm({ folder, onSaved }: Props) {
                 className={`Folder-icon-choice ${option.value === icon ? 'selected' : ''}`}
                 onClick={() => setIcon(option.value)}
                 aria-pressed={option.value === icon}
+                aria-label={option.label}
+                title={option.label}
               >
                 <span className="Folder-icon-mark">{option.icon}</span>
-                <span className="Folder-icon-label">{option.label}</span>
               </button>
             ))}
           </div>
@@ -168,9 +178,14 @@ export default function FolderForm({ folder, onSaved }: Props) {
       </div>
       <div className="Folder-form-actions">
         <div className="Folder-form-hint">Tip: drag files into folders after creating them.</div>
-        <button className="btn btn-text" type="submit">
-          {folder ? 'Save changes' : 'Create folder'}
-        </button>
+        <div className="Folder-form-buttons">
+          <button className="btn btn-secondary" type="button" onClick={onCancel}>
+            Cancel
+          </button>
+          <button className="btn btn-text" type="submit">
+            {folder ? 'Save changes' : 'Create folder'}
+          </button>
+        </div>
       </div>
     </form>
   )

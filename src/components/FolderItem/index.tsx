@@ -5,6 +5,10 @@ import IconGallery from '../icons/IconGallery'
 import IconVideo from '../icons/IconVideo'
 import IconDocument from '../icons/IconDocument'
 import IconLayer from '../icons/IconLayer'
+import IconCamera from '../icons/IconCamera'
+import IconMusic from '../icons/IconMusic'
+import IconCloud from '../icons/IconCloud'
+import IconStar from '../icons/IconStar'
 
 type Props = {
   folder: Folder
@@ -20,6 +24,10 @@ const iconByType: Record<FolderIcon, ReactNode> = {
   video: <IconVideo />,
   document: <IconDocument />,
   layer: <IconLayer />,
+  camera: <IconCamera />,
+  music: <IconMusic />,
+  cloud: <IconCloud />,
+  star: <IconStar />,
 }
 
 export default function FolderItem({

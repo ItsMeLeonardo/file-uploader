@@ -5,17 +5,33 @@ import FolderForm from '../FolderForm'
 import { useFolder } from '../../store/folder'
 import { useFile } from '../../store/file'
 import { Folder } from '../../entities/Folder'
+import ModalContainer from '../Modal'
+import IconClose from '../icons/IconClose'
 
 export default function FolderList() {
   const { folders, activeFolderId, setActiveFolder } = useFolder()
   const { moveFileToFolder, allFiles } = useFile()
   const [editingFolder, setEditingFolder] = useState<Folder | null>(null)
+  const [isFormOpen, setIsFormOpen] = useState(false)
 
   const handleSelect = (folderId: string) => {
     setActiveFolder(activeFolderId === folderId ? null : folderId)
   }
 
-  const handleConfigure = (folder: Folder) => setEditingFolder(folder)
+  const handleConfigure = (folder: Folder) => {
+    setEditingFolder(folder)
+    setIsFormOpen(true)
+  }
+
+  const handleNewFolder = () => {
+    setEditingFolder(null)
+    setIsFormOpen(true)
+  }
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false)
+    setEditingFolder(null)
+  }
 
   const folderCounts = folders.reduce<Record<string, number>>((acc, folder) => {
     acc[folder.id] = allFiles.filter((file) => file.folderId === folder.id).length
@@ -31,12 +47,11 @@ export default function FolderList() {
         </div>
         <div className="Folders-actions">
           <p className="Folders-hint">Drag files onto a folder to move them</p>
-          <button className="btn btn-text" type="button" onClick={() => setEditingFolder(null)}>
+          <button className="btn btn-text" type="button" onClick={handleNewFolder}>
             New folder
           </button>
         </div>
       </header>
-      <FolderForm folder={editingFolder} onSaved={() => setEditingFolder(null)} />
       <ul className="Folders-list">
         {folders.map((folder) => (
           <FolderItem
@@ -50,6 +65,19 @@ export default function FolderList() {
           />
         ))}
       </ul>
+      {isFormOpen && (
+        <ModalContainer onClick={handleCloseForm}>
+          <div className="Folder-modal" onClick={(event) => event.stopPropagation()}>
+            <div className="Folder-modal-header">
+              <p className="Folder-modal-title">{editingFolder ? 'Edit folder' : 'Create a folder'}</p>
+              <button className="Folder-modal-close" type="button" onClick={handleCloseForm} aria-label="Close">
+                <IconClose />
+              </button>
+            </div>
+            <FolderForm folder={editingFolder} onSaved={handleCloseForm} onCancel={handleCloseForm} />
+          </div>
+        </ModalContainer>
+      )}
     </section>
   )
 }

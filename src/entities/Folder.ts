@@ -1,4 +1,4 @@
-export type FolderIcon = 'gallery' | 'video' | 'document' | 'layer'
+export type FolderIcon = 'gallery' | 'video' | 'document' | 'layer' | 'camera' | 'music' | 'cloud' | 'star'
 
 export type Folder = {
   id: string
