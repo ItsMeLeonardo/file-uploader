@@ -40,7 +40,7 @@ export default function DropZone({ onDrop }: DropZoneProps) {
   }
 
   return (
-    <div>
+    <div className="DropZone-container">
       <label
         htmlFor="file"
         className="layout Drop-zone"

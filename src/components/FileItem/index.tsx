@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { DragEvent, useEffect, useMemo, useState } from 'react'
 import { FileUP } from '../../entities/File'
 import { useFile } from '../../store/file'
+import { useFolder } from '../../store/folder'
 import { generateVideoThumbnail } from '../../utils/video'
 
 import IconClose from '../icons/IconClose'
@@ -19,8 +20,13 @@ type Props = {
 
 export default function FileItem({ fileItem, seeDetail }: Props) {
   const { loadFile } = useFile()
+  const { folders } = useFolder()
 
   const { name, status, file, id } = fileItem
+  const folderName = useMemo(
+    () => folders.find((folder) => folder.id === fileItem.folderId)?.name,
+    [folders, fileItem.folderId]
+  )
 
   const [progressValue, setProgressValue] = useState(status === 'completed' ? 100 : 0)
 
@@ -69,8 +75,17 @@ export default function FileItem({ fileItem, seeDetail }: Props) {
   const hasThumbnail =
     fileItem.file.type.includes('image') || fileItem.file.type.includes('video')
 
+  const handleDragStart = (event: DragEvent<HTMLLIElement>) => {
+    event.dataTransfer.setData('text/x-file-id', id)
+    event.dataTransfer.effectAllowed = 'move'
+  }
+
   return (
-    <li className={`File-item ${classByStatus[status]}`}>
+    <li
+      className={`File-item ${classByStatus[status]}`}
+      draggable
+      onDragStart={handleDragStart}
+    >
       {hasThumbnail ? (
         <picture className="File-thumbnail">
           <img src={fileItem.thumbnail} />
@@ -82,6 +97,7 @@ export default function FileItem({ fileItem, seeDetail }: Props) {
         <div className="File-info">
           <h2 className="File-text">{name}</h2>
           <span className="File-progress">{progressValue}%</span>
+          {folderName && <span className="File-folder">{folderName}</span>}
           <button className="File-detail btn btn-text" onClick={seeDetail}>
             Details
           </button>

@@ -5,6 +5,7 @@ import IconGallery from '../icons/IconGallery'
 import IconVideo from '../icons/IconVideo'
 import IconDocument from '../icons/IconDocument'
 import IconLayer from '../icons/IconLayer'
+import IconMusic from '../icons/IconMusic'
 import { Filters } from '../../entities/Filter'
 
 type Props = {
@@ -23,6 +24,8 @@ const getIconByFilterName = (name: Filters) => {
       return <IconVideo />
     case 'Documents':
       return <IconDocument />
+    case 'Audio':
+      return <IconMusic />
     case 'Others':
       return <IconLayer />
     default:
