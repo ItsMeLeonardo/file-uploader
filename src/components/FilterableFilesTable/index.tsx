@@ -1,12 +1,14 @@
 import { DragEvent, ReactNode, useState } from 'react'
 
 import { useFile } from '../../store/file'
+import ProjectPanel from '../ProjectPanel'
 
 type Props = {
-  children: ReactNode | ReactNode[]
+  filters: ReactNode | ReactNode[]
+  files: ReactNode | ReactNode[]
 }
 
-export default function FilterableFilesTable({ children }: Props) {
+export default function FilterableFilesTable({ filters, files }: Props) {
   const { removeCompletedFiles, moveFileToFolder } = useFile()
   const [isDropTarget, setIsDropTarget] = useState(false)
 
@@ -44,7 +46,11 @@ export default function FilterableFilesTable({ children }: Props) {
           Clear completed
         </button>
       </header>
-      {children}
+      <div className="FilterableFiles-shell">
+        <div className="FilterableFiles-card">{filters}</div>
+        <ProjectPanel />
+      </div>
+      <div className="FilterableFiles-list">{files}</div>
     </aside>
   )
 }

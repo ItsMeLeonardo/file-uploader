@@ -91,13 +91,13 @@ const extractor = (state: FileStore): FileStore => ({
   setFiles: state.setFiles,
 })
 
-const createFileUP = (file: File): FileUP => {
+const createFileUP = (file: File, folderId: string | null = null): FileUP => {
   const fileUP: FileUP = {
     id: nanoid(),
     file,
     name: file.name,
     status: 'loading',
-    folderId: null,
+    folderId,
   }
   return fileUP
 }
@@ -125,19 +125,19 @@ export const useFile = () => {
     store.setFiles(normalizedFiles)
   }
 
-  const addFile = (file: File[] | File) => {
+  const addFile = (file: File[] | File, folderId: string | null = null) => {
     if (!Array.isArray(file)) {
-      const fileUP = createFileUP(file)
+      const fileUP = createFileUP(file, folderId)
       store.addFile(fileUP)
       return
     }
     if (file.length === 1) {
-      const fileUP = createFileUP(file[0])
+      const fileUP = createFileUP(file[0], folderId)
       store.addFile(fileUP)
       return
     }
     const files = file.map((file) => {
-      return createFileUP(file)
+      return createFileUP(file, folderId)
     })
 
     store.addMultipleFiles(files)
@@ -181,6 +181,7 @@ export const useFile = () => {
     files,
     allFiles: store.files,
     addFile,
+    addFileToFolder: (file: File | File[], folderId: string) => addFile(file, folderId),
     removeFile,
     getFileById,
     removeCompletedFiles,

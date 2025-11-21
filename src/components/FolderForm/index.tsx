@@ -35,12 +35,14 @@ export default function FolderForm({ folder, onSaved, onCancel }: Props) {
   const { addFolder, updateFolder } = useFolder()
 
   const [name, setName] = useState(folder?.name ?? '')
+  const [build, setBuild] = useState(folder?.build ?? 'Build 1.0')
   const [tags, setTags] = useState(folder?.tags.join(', ') ?? '')
   const [icon, setIcon] = useState<FolderIcon>(folder?.icon ?? 'gallery')
   const [color, setColor] = useState(folder?.color ?? COLOR_PRESETS[0])
 
   useEffect(() => {
     setName(folder?.name ?? '')
+    setBuild(folder?.build ?? 'Build 1.0')
     setTags(folder?.tags.join(', ') ?? '')
     setIcon(folder?.icon ?? 'gallery')
     setColor(folder?.color ?? COLOR_PRESETS[0])
@@ -64,6 +66,7 @@ export default function FolderForm({ folder, onSaved, onCancel }: Props) {
     const newFolder: Folder = {
       id: folder?.id ?? nanoid(),
       name: name.trim(),
+      build: build.trim() || 'Draft build',
       tags: tagsList,
       icon,
       color,
@@ -74,6 +77,7 @@ export default function FolderForm({ folder, onSaved, onCancel }: Props) {
     } else {
       addFolder(newFolder)
       setName('')
+      setBuild('Build 1.0')
       setTags('')
       setIcon('gallery')
       setColor(COLOR_PRESETS[0])
@@ -99,6 +103,7 @@ export default function FolderForm({ folder, onSaved, onCancel }: Props) {
           </div>
           <div className="Folder-preview-meta">
             <p className="Folder-preview-name">{name || 'Folder name'}</p>
+            <span className="Folder-preview-build">{build || 'Build name'}</span>
             <div className="Folder-preview-tags">
               {tagsList.length ? (
                 tagsList.map((tag) => (
@@ -123,6 +128,15 @@ export default function FolderForm({ folder, onSaved, onCancel }: Props) {
             required
           />
           <small>Use a short, descriptive name.</small>
+        </label>
+        <label className="Folder-form-field">
+          <span>Build</span>
+          <input
+            value={build}
+            onChange={(event) => setBuild(event.target.value)}
+            placeholder="e.g. Build 21.4, Client demo"
+          />
+          <small>Track the current build or milestone for the project.</small>
         </label>
         <label className="Folder-form-field">
           <span>Tags</span>

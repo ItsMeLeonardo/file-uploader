@@ -4,6 +4,7 @@ export type Folder = {
   id: string
   name: string
   tags: string[]
+  build: string
   icon: FolderIcon
   color: string
 }

@@ -24,10 +24,7 @@ export default function App() {
       <header className="Logo">UpCloud</header>
       <DropZone onDrop={handleDropZone} />
       <FolderList />
-      <FilterableFilesTable>
-        <FiltersList />
-        <FileList />
-      </FilterableFilesTable>
+      <FilterableFilesTable filters={<FiltersList />} files={<FileList />} />
       <ToastContainer />
     </section>
   )

@@ -83,6 +83,7 @@ export default function FolderItem({
       </div>
       <div className="Folder-meta">
         <p className="Folder-name">{folder.name}</p>
+        <span className="Folder-build">{folder.build}</span>
         <div className="Folder-tags">
           {folder.tags.map((tag) => (
             <span key={tag} className="Folder-tag">
